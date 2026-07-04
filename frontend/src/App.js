@@ -11,7 +11,8 @@ import Checkout from './pages/Checkout';
 import OrderSuccess from './pages/OrderSuccess';
 
 function ProtectedRoute({ children }) {
-  const { user } = useAuth();
+  const { user, ready } = useAuth();
+  if (!ready) return null;
   return user ? children : <Navigate to="/connexion" replace />;
 }
 

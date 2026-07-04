@@ -28,8 +28,7 @@ router.post('/:id/renouveler', auth, async (req, res) => {
       `UPDATE abonnements
        SET date_expiration = GREATEST(date_expiration, NOW()) + INTERVAL '30 days',
            statut = 'actif',
-           notif_2j_envoyee = false,
-           mis_a_jour_le = NOW()
+           notif_2j_envoyee = false
        WHERE id = $1 AND utilisateur_id = $2
        RETURNING *`,
       [req.params.id, req.user.id]

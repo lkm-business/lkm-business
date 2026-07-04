@@ -1,11 +1,11 @@
 const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
-  host: process.env.EMAIL_HOST,
-  port: process.env.EMAIL_PORT,
+  host: process.env.SMTP_HOST,
+  port: process.env.SMTP_PORT,
   auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS,
   }
 });
 
@@ -24,7 +24,7 @@ async function sendExpirationEmails(db) {
   for (const abo of result.rows) {
     try {
       await transporter.sendMail({
-        from: `"LKM_BUSINESS" <${process.env.EMAIL_USER}>`,
+        from: `"${process.env.FROM_NAME}" <${process.env.FROM_EMAIL}>`,
         to: abo.email,
         subject: `⚠️ Votre abonnement ${abo.nom_abonnement} expire dans 2 jours`,
         html: `

@@ -6,13 +6,15 @@ const AuthContext = createContext(null);
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem('lkm_token');
-    if (!token) return;
+    if (!token) { setReady(true); return; }
     API.get('/auth/profil')
       .then(r => setUser(r.data))
-      .catch(() => localStorage.removeItem('lkm_token'));
+      .catch(() => localStorage.removeItem('lkm_token'))
+      .finally(() => setReady(true));
   }, []);
 
   const connexion = async (email, mot_de_passe) => {
@@ -49,7 +51,7 @@ export function AuthProvider({ children }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, connexion, inscription, deconnexion }}>
+    <AuthContext.Provider value={{ user, loading, ready, connexion, inscription, deconnexion }}>
       {children}
     </AuthContext.Provider>
   );
