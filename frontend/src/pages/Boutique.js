@@ -97,8 +97,8 @@ export default function Boutique() {
 
       {/* Physique */}
       {onglet === 'physique' && cats.map(cat => (
-        <div key={cat} style={{padding:'16px 20px',borderBottom:'0.5px solid #f0f0f0'}}>
-          <div style={{fontSize:13,fontWeight:500,marginBottom:12}}>
+        <div key={cat} style={{padding:'16px 20px',borderBottom:'0.5px solid rgba(255,255,255,0.1)'}}>
+          <div style={{fontSize:13,fontWeight:500,marginBottom:12,color:'white'}}>
             {ICO[cat]||'📦'} {physiques.find(p=>p.categorie_slug===cat)?.categorie_nom}
           </div>
           <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(145px,1fr))',gap:10}}>
@@ -127,8 +127,8 @@ export default function Boutique() {
 
       {/* Numérique */}
       {onglet === 'numerique' && (<>
-        <div style={{padding:'16px 20px',borderBottom:'0.5px solid #f0f0f0'}}>
-          <div style={{fontSize:13,fontWeight:500,marginBottom:12}}>🎬 Abonnements streaming</div>
+        <div style={{padding:'16px 20px',borderBottom:'0.5px solid rgba(255,255,255,0.1)'}}>
+          <div style={{fontSize:13,fontWeight:500,marginBottom:12,color:'white'}}>🎬 Abonnements streaming</div>
           <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(145px,1fr))',gap:10}}>
             {streaming.map(p=>(
               <div key={p.id} className="product-card" style={{background:'white',border:'0.5px solid #e5e5e5',borderRadius:12,padding:10}}>
@@ -154,7 +154,7 @@ export default function Boutique() {
         </div>
 
         <div style={{padding:'16px 20px'}}>
-          <div style={{fontSize:13,fontWeight:500,marginBottom:12}}>📡 IPTV — Choisir ta formule</div>
+          <div style={{fontSize:13,fontWeight:500,marginBottom:12,color:'white'}}>📡 IPTV — Choisir ta formule</div>
           <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(260px,1fr))',gap:12}}>
             {iptv.map(p=>(
               <div key={p.id} className="product-card" style={{background:'white',border: p.slug==='iptv-ultra-premium'?'2px solid #1D9E75':'0.5px solid #e5e5e5',borderRadius:12,padding:14}}>
