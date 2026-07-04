@@ -2,16 +2,20 @@ import { Link } from 'react-router-dom';
 
 export default function OrderSuccess() {
   return (
-    <main className="success-page">
-      <div className="success-card">
-        <div className="success-icon">✅</div>
-        <h1>Commande confirmée !</h1>
-        <p>Merci pour ta commande. Tes abonnements digitaux sont maintenant actifs dans ton compte.</p>
-        <div className="success-actions">
-          <Link to="/compte" className="btn-primary">Voir mes abonnements</Link>
-          <Link to="/" className="btn-secondary">Continuer les achats</Link>
-        </div>
+    <div style={{maxWidth:420,margin:'64px auto',padding:'0 20px',textAlign:'center'}}>
+      <div style={{fontSize:48,marginBottom:12}}>✅</div>
+      <h1 style={{fontSize:19,fontWeight:500,marginBottom:8}}>Commande confirmée !</h1>
+      <p style={{fontSize:13,color:'#888',marginBottom:24}}>
+        Merci pour ta commande. Tes abonnements digitaux sont maintenant actifs dans ton compte.
+      </p>
+      <div style={{display:'flex',gap:10,justifyContent:'center'}}>
+        <Link to="/compte" style={{padding:'10px 18px',background:'#1D9E75',color:'white',borderRadius:8,fontSize:13,fontWeight:500,textDecoration:'none'}}>
+          Voir mes abonnements
+        </Link>
+        <Link to="/" style={{padding:'10px 18px',border:'0.5px solid #ddd',borderRadius:8,fontSize:13,color:'#333',textDecoration:'none'}}>
+          Continuer les achats
+        </Link>
       </div>
-    </main>
+    </div>
   );
 }

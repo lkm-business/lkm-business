@@ -1,47 +1,55 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import axios from 'axios';
+import API from '../utils/api';
 
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem('lkm_token');
-    if (token) {
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      axios.get('/api/auth/me')
-        .then(r => setUser(r.data))
-        .catch(() => localStorage.removeItem('lkm_token'))
-        .finally(() => setLoading(false));
-    } else setLoading(false);
+    if (!token) return;
+    API.get('/auth/profil')
+      .then(r => setUser(r.data))
+      .catch(() => localStorage.removeItem('lkm_token'));
   }, []);
 
-  const login = async (email, password) => {
-    const r = await axios.post('/api/auth/login', { email, password });
-    localStorage.setItem('lkm_token', r.data.token);
-    axios.defaults.headers.common['Authorization'] = `Bearer ${r.data.token}`;
-    setUser(r.data.user);
-    return r.data.user;
+  const connexion = async (email, mot_de_passe) => {
+    setLoading(true);
+    try {
+      const { data } = await API.post('/auth/connexion', { email, mot_de_passe });
+      localStorage.setItem('lkm_token', data.token);
+      setUser(data.user);
+      return { success: true };
+    } catch (err) {
+      return { success: false, message: err.response?.data?.message || 'Erreur de connexion' };
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const register = async (name, email, password, phone) => {
-    const r = await axios.post('/api/auth/register', { name, email, password, phone });
-    localStorage.setItem('lkm_token', r.data.token);
-    axios.defaults.headers.common['Authorization'] = `Bearer ${r.data.token}`;
-    setUser(r.data.user);
-    return r.data.user;
+  const inscription = async (nom, email, mot_de_passe, telephone) => {
+    setLoading(true);
+    try {
+      const { data } = await API.post('/auth/inscription', { nom, email, mot_de_passe, telephone });
+      localStorage.setItem('lkm_token', data.token);
+      setUser(data.user);
+      return { success: true };
+    } catch (err) {
+      return { success: false, message: err.response?.data?.message || "Erreur d'inscription" };
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const logout = () => {
+  const deconnexion = () => {
     localStorage.removeItem('lkm_token');
-    delete axios.defaults.headers.common['Authorization'];
     setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout }}>
+    <AuthContext.Provider value={{ user, loading, connexion, inscription, deconnexion }}>
       {children}
     </AuthContext.Provider>
   );

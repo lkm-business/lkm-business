@@ -4,25 +4,42 @@ const CartContext = createContext(null);
 
 export function CartProvider({ children }) {
   const [items, setItems] = useState([]);
-  const [isOpen, setIsOpen] = useState(false);
+  const [open, setOpen] = useState(false);
 
-  const add = (item) => {
+  const ajouter = (produit, formule = null) => {
+    const key = formule ? `${produit.id}-${formule.id}` : `${produit.id}`;
     setItems(prev => {
-      const ex = prev.find(i => i.cartKey === item.cartKey);
-      if (ex) return prev.map(i => i.cartKey === item.cartKey ? { ...i, qty: i.qty + 1 } : i);
-      return [...prev, { ...item, qty: 1 }];
+      const existant = prev.find(i => i.key === key);
+      if (existant) {
+        return prev.map(i => i.key === key ? { ...i, quantite: i.quantite + 1 } : i);
+      }
+      return [...prev, {
+        key,
+        produit_id: produit.id,
+        formule_iptv_id: formule ? formule.id : null,
+        nom: formule ? `${produit.nom} — ${formule.duree_label}` : produit.nom,
+        prix: formule ? formule.prix : produit.prix,
+        quantite: 1,
+        type: produit.type,
+        days: formule ? formule.duree_jours : null,
+      }];
     });
   };
 
-  const remove = (cartKey) => setItems(prev => prev.filter(i => i.cartKey !== cartKey));
+  const retirer = (key) => setItems(prev => prev.filter(i => i.key !== key));
 
-  const clear = () => setItems([]);
+  const modifierQte = (key, quantite) => {
+    if (quantite < 1) { retirer(key); return; }
+    setItems(prev => prev.map(i => i.key === key ? { ...i, quantite } : i));
+  };
 
-  const total = items.reduce((s, i) => s + i.price * i.qty, 0);
-  const count = items.reduce((s, i) => s + i.qty, 0);
+  const vider = () => setItems([]);
+
+  const total = items.reduce((s, i) => s + i.prix * i.quantite, 0);
+  const nbArticles = items.reduce((s, i) => s + i.quantite, 0);
 
   return (
-    <CartContext.Provider value={{ items, add, remove, clear, total, count, isOpen, setIsOpen }}>
+    <CartContext.Provider value={{ items, ajouter, retirer, modifierQte, vider, total, nbArticles, open, setOpen }}>
       {children}
     </CartContext.Provider>
   );
