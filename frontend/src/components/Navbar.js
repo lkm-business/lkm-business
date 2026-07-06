@@ -3,15 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 
-const CATEGORIES = [
-  { key: 'montres', label: 'Montres' },
-  { key: 'audio', label: 'Audio' },
-  { key: 'airpods', label: 'AirPods' },
-  { key: 'accessoires', label: 'Accessoires' },
-  { key: 'streaming', label: 'Streaming' },
-  { key: 'iptv', label: 'IPTV' },
-];
-
 export default function Navbar() {
   const { user, deconnexion } = useAuth();
   const { nbArticles, setOpen } = useCart();
@@ -29,7 +20,10 @@ export default function Navbar() {
     navigate(search.trim() ? `/?q=${encodeURIComponent(search.trim())}` : '/');
   };
 
-  const goCategorie = (key) => navigate(`/?cat=${key}`);
+  const goProduits = () => {
+    navigate('/');
+    setTimeout(() => document.getElementById('produits')?.scrollIntoView({behavior: 'smooth'}), 60);
+  };
 
   return (
     <div>
@@ -72,13 +66,14 @@ export default function Navbar() {
         </div>
       </nav>
 
-      <div style={{display: 'flex', gap: 4, padding: '8px 24px', background: 'white', borderBottom: '0.5px solid #e5e5e5', overflowX: 'auto'}}>
-        {CATEGORIES.map(c => (
-          <button key={c.key} onClick={() => goCategorie(c.key)} style={{padding: '6px 12px', fontSize: 12, border: 'none', background: 'none', cursor: 'pointer', color: '#444', fontWeight: 500, borderRadius: 20, whiteSpace: 'nowrap'}}>
-            {c.label}
-          </button>
-        ))}
+      <div style={{display: 'flex', gap: 20, padding: '8px 24px', background: 'white', borderBottom: '0.5px solid #e5e5e5', overflowX: 'auto'}}>
+        <Link to="/" style={navLinkStyle}>Accueil</Link>
+        <button onClick={goProduits} style={{...navLinkStyle, background: 'none', border: 'none', cursor: 'pointer', padding: 0}}>Produits</button>
+        <Link to="/promotions" style={navLinkStyle}>Promotions</Link>
+        <Link to="/contact" style={navLinkStyle}>Contact</Link>
       </div>
     </div>
   );
 }
+
+const navLinkStyle = {fontSize: 13, fontWeight: 500, color: '#333', textDecoration: 'none', whiteSpace: 'nowrap'};

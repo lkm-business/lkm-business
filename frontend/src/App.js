@@ -10,6 +10,8 @@ import Connexion from './pages/Connexion';
 import Compte from './pages/Compte';
 import Checkout from './pages/Checkout';
 import OrderSuccess from './pages/OrderSuccess';
+import Promotions from './pages/Promotions';
+import Contact from './pages/Contact';
 
 function ProtectedRoute({ children }) {
   const { user, ready } = useAuth();
@@ -31,6 +33,8 @@ export default function App() {
             <Route path="/compte" element={<ProtectedRoute><Compte /></ProtectedRoute>} />
             <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
             <Route path="/commande/succes" element={<ProtectedRoute><OrderSuccess /></ProtectedRoute>} />
+            <Route path="/promotions" element={<Promotions />} />
+            <Route path="/contact" element={<Contact />} />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
           <Footer />

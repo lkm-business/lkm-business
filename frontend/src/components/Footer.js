@@ -15,7 +15,7 @@ export default function Footer() {
           <div style={{fontSize: 12, fontWeight: 600, marginBottom: 10, opacity: 0.9}}>Boutique</div>
           <div style={{display: 'flex', flexDirection: 'column', gap: 6}}>
             <Link to="/" style={linkStyle}>Tous les produits</Link>
-            <Link to="/?cat=montres" style={linkStyle}>Montres connectées</Link>
+            <Link to="/promotions" style={linkStyle}>Promotions</Link>
             <Link to="/?cat=iptv" style={linkStyle}>IPTV</Link>
           </div>
         </div>
@@ -28,9 +28,14 @@ export default function Footer() {
         </div>
         <div>
           <div style={{fontSize: 12, fontWeight: 600, marginBottom: 10, opacity: 0.9}}>Contact</div>
-          <div style={{fontSize: 12, opacity: 0.8, lineHeight: 1.8}}>
-            contact@lkmbusiness.com<br />
+          <div style={{fontSize: 12, opacity: 0.8, lineHeight: 1.8, marginBottom: 10}}>
+            <Link to="/contact" style={linkStyle}>contact@lkmbusiness.com</Link><br />
             Paiement : Orange Money, Wave, Stripe
+          </div>
+          <div style={{display: 'flex', gap: 12}}>
+            <a href="https://www.tiktok.com/@lkm_suarl" target="_blank" rel="noopener noreferrer" style={socialStyle} aria-label="TikTok">🎵</a>
+            <a href="https://wa.me/message/VK75NLUQCZUIJ1" target="_blank" rel="noopener noreferrer" style={socialStyle} aria-label="WhatsApp">💬</a>
+            <a href="https://www.snapchat.com/add/ns-jusse" target="_blank" rel="noopener noreferrer" style={socialStyle} aria-label="Snapchat">👻</a>
           </div>
         </div>
       </div>
@@ -42,3 +47,4 @@ export default function Footer() {
 }
 
 const linkStyle = { fontSize: 12, color: 'rgba(255,255,255,0.8)', textDecoration: 'none' };
+const socialStyle = { fontSize: 18, textDecoration: 'none', color: 'white', background: 'rgba(255,255,255,0.12)', width: 32, height: 32, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' };

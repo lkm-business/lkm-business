@@ -132,6 +132,17 @@ CREATE TABLE panier (
 );
 
 -- ============================================
+-- TABLE: avis
+-- ============================================
+CREATE TABLE avis (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  utilisateur_id UUID REFERENCES utilisateurs(id) ON DELETE CASCADE,
+  note INTEGER NOT NULL CHECK (note BETWEEN 1 AND 5),
+  commentaire TEXT NOT NULL,
+  cree_le TIMESTAMP DEFAULT NOW()
+);
+
+-- ============================================
 -- DONNÉES INITIALES: Catégories
 -- ============================================
 INSERT INTO categories (nom, slug, type) VALUES
@@ -197,3 +208,11 @@ CREATE INDEX idx_abonnements_user ON abonnements(utilisateur_id);
 CREATE INDEX idx_abonnements_expiration ON abonnements(date_expiration);
 CREATE INDEX idx_commandes_user ON commandes(utilisateur_id);
 CREATE INDEX idx_produits_type ON produits(type);
+CREATE INDEX idx_avis_date ON avis(cree_le);
+
+-- ============================================
+-- DONNÉES: quelques promotions de démo
+-- ============================================
+UPDATE produits SET prix_promo = 74000 WHERE slug = 'airpods-pro-2';
+UPDATE produits SET prix_promo = 24000 WHERE slug = 'hw16-max';
+UPDATE produits SET prix_promo = 29000 WHERE slug = 'jbl-tune-720bt';

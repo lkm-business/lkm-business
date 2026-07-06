@@ -37,6 +37,7 @@ app.use('/api/commandes', require('./routes/commandes'));
 app.use('/api/abonnements', require('./routes/abonnements'));
 app.use('/api/paiements', require('./routes/paiements'));
 app.use('/api/panier',    require('./routes/panier'));
+app.use('/api/avis',      require('./routes/avis'));
 
 // Route de santé
 app.get('/api/health', (req, res) => {

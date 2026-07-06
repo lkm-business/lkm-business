@@ -8,6 +8,9 @@ export function CartProvider({ children }) {
 
   const ajouter = (produit, formule = null) => {
     const key = formule ? `${produit.id}-${formule.id}` : `${produit.id}`;
+    const prixUnitaire = formule
+      ? formule.prix
+      : (produit.prix_promo && Number(produit.prix_promo) < Number(produit.prix) ? produit.prix_promo : produit.prix);
     setItems(prev => {
       const existant = prev.find(i => i.key === key);
       if (existant) {
@@ -18,7 +21,7 @@ export function CartProvider({ children }) {
         produit_id: produit.id,
         formule_iptv_id: formule ? formule.id : null,
         nom: formule ? `${produit.nom} — ${formule.duree_label}` : produit.nom,
-        prix: formule ? formule.prix : produit.prix,
+        prix: prixUnitaire,
         quantite: 1,
         type: produit.type,
         days: formule ? formule.duree_jours : null,
