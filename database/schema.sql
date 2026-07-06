@@ -158,12 +158,12 @@ INSERT INTO categories (nom, slug, type) VALUES
 INSERT INTO produits (nom, slug, prix, type, categorie_id, stock) VALUES
   ('HW11 Pro', 'hw11-pro', 25000, 'physique', 1, 50),
   ('HW16 Max', 'hw16-max', 30000, 'physique', 1, 30),
-  ('JBL TUNE 720BT', 'jbl-tune-720bt', 35000, 'physique', 2, 40),
-  ('JBL TUNE 520BT', 'jbl-tune-520bt', 28000, 'physique', 2, 35),
-  ('AirPods Pro 2', 'airpods-pro-2', 85000, 'physique', 2, 20),
-  ('AirPods Pro 3', 'airpods-pro-3', 95000, 'physique', 2, 15),
-  ('AirPods 4', 'airpods-4', 70000, 'physique', 2, 25),
-  ('Tripod Live', 'tripod-live', 15000, 'physique', 3, 60);
+  ('JBL TUNE 720BT', 'jbl-tune-720bt', 40000, 'physique', 2, 40),
+  ('JBL TUNE 520BT', 'jbl-tune-520bt', 30000, 'physique', 2, 35),
+  ('AirPods Pro 2', 'airpods-pro-2', 10000, 'physique', 2, 20),
+  ('AirPods Pro 3', 'airpods-pro-3', 15000, 'physique', 2, 15),
+  ('AirPods 4', 'airpods-4', 15000, 'physique', 2, 25),
+  ('Tripod Live', 'tripod-live', 20000, 'physique', 3, 60);
 
 -- ============================================
 -- DONNÉES INITIALES: Produits numériques (streaming)
@@ -211,8 +211,11 @@ CREATE INDEX idx_produits_type ON produits(type);
 CREATE INDEX idx_avis_date ON avis(cree_le);
 
 -- ============================================
--- DONNÉES: quelques promotions de démo
+-- DONNÉES: images produits réelles
 -- ============================================
-UPDATE produits SET prix_promo = 74000 WHERE slug = 'airpods-pro-2';
-UPDATE produits SET prix_promo = 24000 WHERE slug = 'hw16-max';
-UPDATE produits SET prix_promo = 29000 WHERE slug = 'jbl-tune-720bt';
+UPDATE produits SET image_principale = '/images/airpods4.webp' WHERE slug = 'airpods-4';
+UPDATE produits SET image_principale = '/images/airpodspro2.jpg' WHERE slug = 'airpods-pro-2';
+UPDATE produits SET image_principale = '/images/airpodspro3.jpg' WHERE slug = 'airpods-pro-3';
+UPDATE produits SET image_principale = '/images/jbl520.jpeg' WHERE slug = 'jbl-tune-520bt';
+UPDATE produits SET image_principale = '/images/jbl720.jpeg' WHERE slug = 'jbl-tune-720bt';
+UPDATE produits SET image_principale = '/images/tripod.jpeg' WHERE slug = 'tripod-live';
