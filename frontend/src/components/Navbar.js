@@ -20,11 +20,6 @@ export default function Navbar() {
     navigate(search.trim() ? `/?q=${encodeURIComponent(search.trim())}` : '/');
   };
 
-  const goProduits = () => {
-    navigate('/');
-    setTimeout(() => document.getElementById('produits')?.scrollIntoView({behavior: 'smooth'}), 60);
-  };
-
   return (
     <div>
       {promoOpen && (
@@ -66,13 +61,32 @@ export default function Navbar() {
         </div>
       </nav>
 
-      <div style={{display: 'flex', gap: 20, padding: '8px 24px', background: 'white', borderBottom: '0.5px solid #e5e5e5', overflowX: 'auto'}}>
+      <div style={{display: 'flex', gap: 24, padding: '8px 24px', background: 'white', borderBottom: '0.5px solid #e5e5e5', overflowX: 'auto'}}>
         <Link to="/" style={navLinkStyle}>Accueil</Link>
-        <button onClick={goProduits} style={{...navLinkStyle, background: 'none', border: 'none', cursor: 'pointer', padding: 0}}>Produits</button>
+
+        <div className="nav-dropdown">
+          <span style={navLinkStyle}>Produits physiques ▾</span>
+          <div className="nav-dropdown-menu">
+            <Link to="/produits#montres" style={dropdownItemStyle}>Montres connectées</Link>
+            <Link to="/produits#audio" style={dropdownItemStyle}>Audio (JBL + AirPods)</Link>
+            <Link to="/produits#accessoires" style={dropdownItemStyle}>Accessoires</Link>
+          </div>
+        </div>
+
+        <div className="nav-dropdown">
+          <span style={navLinkStyle}>Abonnements & IPTV ▾</span>
+          <div className="nav-dropdown-menu">
+            <Link to="/abonnements#streaming" style={dropdownItemStyle}>Streaming (Netflix, Prime, Crunchyroll, Apple Music)</Link>
+            <Link to="/abonnements#iptv-premium" style={dropdownItemStyle}>IPTV Premium</Link>
+            <Link to="/abonnements#iptv-ultra-premium" style={dropdownItemStyle}>IPTV Ultra Premium</Link>
+          </div>
+        </div>
+
         <Link to="/contact" style={navLinkStyle}>Contact</Link>
       </div>
     </div>
   );
 }
 
-const navLinkStyle = {fontSize: 13, fontWeight: 500, color: '#333', textDecoration: 'none', whiteSpace: 'nowrap'};
+const navLinkStyle = {fontSize: 13, fontWeight: 500, color: '#333', textDecoration: 'none', whiteSpace: 'nowrap', cursor: 'default'};
+const dropdownItemStyle = {display: 'block', padding: '8px 12px', fontSize: 12, color: '#333', textDecoration: 'none', borderRadius: 6, whiteSpace: 'nowrap'};

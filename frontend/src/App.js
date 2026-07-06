@@ -11,6 +11,8 @@ import Compte from './pages/Compte';
 import Checkout from './pages/Checkout';
 import OrderSuccess from './pages/OrderSuccess';
 import Contact from './pages/Contact';
+import Produits from './pages/Produits';
+import Abonnements from './pages/Abonnements';
 
 function ProtectedRoute({ children }) {
   const { user, ready } = useAuth();
@@ -33,6 +35,8 @@ export default function App() {
             <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
             <Route path="/commande/succes" element={<ProtectedRoute><OrderSuccess /></ProtectedRoute>} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/produits" element={<Produits />} />
+            <Route path="/abonnements" element={<Abonnements />} />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
           <Footer />

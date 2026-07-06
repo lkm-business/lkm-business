@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { OrangeMoneyIcon, WaveIcon, StripeIcon, PaypalIcon, VisaIcon, MastercardIcon, TruckIcon } from './PaymentIcons';
 
 export default function Footer() {
   return (
@@ -15,7 +16,8 @@ export default function Footer() {
           <div style={{fontSize: 12, fontWeight: 600, marginBottom: 10, opacity: 0.9}}>Boutique</div>
           <div style={{display: 'flex', flexDirection: 'column', gap: 6}}>
             <Link to="/" style={linkStyle}>Tous les produits</Link>
-            <Link to="/?cat=iptv" style={linkStyle}>IPTV</Link>
+            <Link to="/produits" style={linkStyle}>Produits physiques</Link>
+            <Link to="/abonnements" style={linkStyle}>Abonnements & IPTV</Link>
           </div>
         </div>
         <div>
@@ -28,8 +30,16 @@ export default function Footer() {
         <div>
           <div style={{fontSize: 12, fontWeight: 600, marginBottom: 10, opacity: 0.9}}>Contact</div>
           <div style={{fontSize: 12, opacity: 0.8, lineHeight: 1.8, marginBottom: 10}}>
-            <Link to="/contact" style={linkStyle}>contact@lkmbusiness.com</Link><br />
-            Paiement : Orange Money, Wave, Stripe
+            <Link to="/contact" style={linkStyle}>contact@lkmbusiness.com</Link>
+          </div>
+          <div style={{display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 14}}>
+            <OrangeMoneyIcon />
+            <WaveIcon />
+            <StripeIcon />
+            <PaypalIcon />
+            <VisaIcon />
+            <MastercardIcon />
+            <TruckIcon />
           </div>
           <div style={{display: 'flex', gap: 12}}>
             <a href="https://www.tiktok.com/@lkm_suarl" target="_blank" rel="noopener noreferrer" style={socialStyle} aria-label="TikTok">🎵</a>

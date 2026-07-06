@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import API from '../utils/api';
-import { produitImg, flickrImg } from '../utils/images';
+import { flickrImg } from '../utils/images';
 import ProductCard from '../components/ProductCard';
+import IptvCard from '../components/IptvCard';
 import Testimonials from '../components/Testimonials';
 import toast from 'react-hot-toast';
 
@@ -57,45 +58,6 @@ export default function Boutique() {
   const bestSellerSlugs = new Set(bestSellers.map(p => p.slug));
 
   const showHome = !q && !cat;
-
-  const renderIptvCard = (p) => (
-    <div key={p.id} className="product-card" style={{background:'#111',border: p.slug==='iptv-ultra-premium'?'2px solid #1D9E75':'1px solid #262626',borderRadius:14,padding:14,boxShadow:'0 4px 14px rgba(0,0,0,0.5)'}}>
-      {p.slug==='iptv-ultra-premium' && <div style={{display:'inline-block',padding:'2px 8px',borderRadius:6,fontSize:10,background:'#E1F5EE',color:'#0F6E56',marginBottom:8,fontWeight:600}}>⭐ Ultra Premium</div>}
-      <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:10}}>
-        <div style={{width:56,height:56,borderRadius:10,overflow:'hidden',flexShrink:0,background:'#1a1a1a'}}>
-          <img src={produitImg(p)} alt={p.nom} className="product-img" style={{width:'100%',height:'100%',objectFit:'cover'}}
-            onError={e=>{ e.target.onerror=null; e.target.style.display='none'; }} />
-        </div>
-        <div>
-          <div style={{fontSize:14,fontWeight:600,color:'white'}}>{p.nom}</div>
-          <div style={{fontSize:11,color:'#999'}}>{p.slug==='iptv-premium'?'18 000 chaînes • 80 000 films':'23 000 chaînes 4K • 128 000 films'}</div>
-        </div>
-      </div>
-      <div style={{fontSize:11,color:'#ccc',fontWeight:500,marginBottom:8}}>Choisir une formule :</div>
-      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:5,marginBottom:10}}>
-        {(p.formules||[]).map(f=>(
-          <button key={f.id} onClick={()=>setIptvSel(s=>({...s,[p.id]:f}))} style={{
-            padding:'7px 8px',border: iptvSel[p.id]?.id===f.id ? '2px solid #1D9E75' : '1px solid #333',
-            borderRadius:8,cursor:'pointer',background: iptvSel[p.id]?.id===f.id ? 'rgba(29,158,117,0.15)' : '#1a1a1a',
-            textAlign:'left',transition:'all 0.1s'
-          }}>
-            <span style={{display:'block',fontSize:11,fontWeight:500,color:iptvSel[p.id]?.id===f.id?'#2DD4A7':'#ddd'}}>{f.duree_label}</span>
-            <span style={{fontSize:11,color:'#2DD4A7',fontWeight:600}}>{fmt(f.prix)}</span>
-          </button>
-        ))}
-      </div>
-      <button
-        disabled={!iptvSel[p.id]}
-        onClick={()=>{ if(iptvSel[p.id]) ajouterProduit(p, iptvSel[p.id]); }}
-        style={{
-          width:'100%',padding:8,background:iptvSel[p.id]?'#1D9E75':'#262626',
-          color:iptvSel[p.id]?'white':'#777',border:'none',borderRadius:8,
-          cursor:iptvSel[p.id]?'pointer':'not-allowed',fontSize:12,fontWeight:600
-        }}>
-        + Ajouter au panier
-      </button>
-    </div>
-  );
 
   return (
     <div>
@@ -172,7 +134,15 @@ export default function Boutique() {
             <div style={{display: 'grid', gridTemplateColumns: slug === 'iptv' ? 'repeat(auto-fill,minmax(260px,1fr))' : 'repeat(auto-fill,minmax(165px,1fr))', gap: 14}}>
               {filtered.filter(p => p.categorie_slug === slug).map(p => (
                 slug === 'iptv'
-                  ? renderIptvCard(p)
+                  ? (
+                    <IptvCard
+                      key={p.id}
+                      produit={p}
+                      selected={iptvSel[p.id]}
+                      onSelectFormule={f => setIptvSel(s => ({...s, [p.id]: f}))}
+                      onAdd={() => { if (iptvSel[p.id]) ajouterProduit(p, iptvSel[p.id]); }}
+                    />
+                  )
                   : (
                     <ProductCard
                       key={p.id}
