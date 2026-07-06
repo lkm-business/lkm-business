@@ -62,7 +62,7 @@ export default function Checkout() {
   };
 
   if (!items.length) return (
-    <div style={{textAlign:'center',padding:'60px 20px',color:'#888'}}>
+    <div style={{textAlign:'center',padding:'60px 20px',color:'#cbd5d2'}}>
       <div style={{fontSize:40,marginBottom:12}}>🛒</div>
       <p>Votre panier est vide</p>
       <button onClick={()=>navigate('/')} style={{marginTop:12,padding:'9px 20px',background:'#1D9E75',color:'white',border:'none',borderRadius:8,cursor:'pointer'}}>
@@ -80,7 +80,7 @@ export default function Checkout() {
 
   return (
     <div style={{maxWidth:580,margin:'32px auto',padding:'0 20px'}}>
-      <h2 style={{fontSize:18,fontWeight:500,marginBottom:20}}>Finaliser la commande</h2>
+      <h2 style={{fontSize:18,fontWeight:500,marginBottom:20,color:'white'}}>Finaliser la commande</h2>
 
       <div style={{background:'white',border:'0.5px solid #e5e5e5',borderRadius:12,padding:16,marginBottom:16}}>
         <div style={{fontSize:13,fontWeight:500,marginBottom:12}}>Récapitulatif</div>

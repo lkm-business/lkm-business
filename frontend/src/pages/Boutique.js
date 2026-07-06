@@ -98,7 +98,7 @@ export default function Boutique() {
             position: 'absolute', left: '3%', top: '14%', width: 150, height: 105, objectFit: 'cover',
             borderRadius: 16, transform: 'rotate(-9deg)', boxShadow: '0 24px 40px rgba(0,0,0,0.35)'
           }} />
-          <img src={flickrImg('headphones', 8, 320, 220)} alt="" className="hero-float" style={{
+          <img src={flickrImg('jbl,headphones', 8, 320, 220)} alt="" className="hero-float" style={{
             position: 'absolute', right: '3%', top: '20%', width: 160, height: 112, objectFit: 'cover',
             borderRadius: 16, transform: 'rotate(8deg)', boxShadow: '0 24px 40px rgba(0,0,0,0.35)'
           }} />
@@ -119,7 +119,7 @@ export default function Boutique() {
       {/* Meilleures ventes */}
       {showHome && bestSellers.length > 0 && (
         <div style={{padding: '28px 24px 6px'}}>
-          <h2 style={{fontSize: 18, fontWeight: 700, marginBottom: 14, color: '#111'}}>🔥 Nos meilleures ventes</h2>
+          <h2 style={{fontSize: 18, fontWeight: 700, marginBottom: 14, color: 'white'}}>🔥 Nos meilleures ventes</h2>
           <div className="carousel-track" style={{display: 'flex', gap: 14, overflowX: 'auto', paddingBottom: 10}}>
             {bestSellers.map(p => (
               <ProductCard
@@ -137,20 +137,20 @@ export default function Boutique() {
 
       <div id="produits" style={{padding: '20px 24px 6px'}}>
         {!showHome && (
-          <div style={{marginBottom: 8, fontSize: 13, color: '#666'}}>
+          <div style={{marginBottom: 8, fontSize: 13, color: '#cbd5d2'}}>
             {q ? `Résultats pour « ${q} »` : `Catégorie : ${CAT_LABEL[cat] || cat}`}
             {' — '}
-            <a href="/" style={{color: '#1D9E75', fontWeight: 600, textDecoration: 'none'}}>Réinitialiser</a>
+            <a href="/" style={{color: '#2DD4A7', fontWeight: 600, textDecoration: 'none'}}>Réinitialiser</a>
           </div>
         )}
 
         {filtered.length === 0 && !showHome && (
-          <div style={{textAlign: 'center', padding: '40px 0', color: '#888'}}>Aucun produit ne correspond à ta recherche.</div>
+          <div style={{textAlign: 'center', padding: '40px 0', color: '#cbd5d2'}}>Aucun produit ne correspond à ta recherche.</div>
         )}
 
         {slugs.map(slug => (
           <div key={slug} style={{marginBottom: 28}}>
-            <div style={{fontSize: 14, fontWeight: 700, marginBottom: 12, color: '#111'}}>
+            <div style={{fontSize: 14, fontWeight: 700, marginBottom: 12, color: 'white'}}>
               {ICO[slug] || '📦'} {filtered.find(p => p.categorie_slug === slug)?.categorie_nom}
             </div>
             <div style={{display: 'grid', gridTemplateColumns: slug === 'iptv' ? 'repeat(auto-fill,minmax(260px,1fr))' : 'repeat(auto-fill,minmax(165px,1fr))', gap: 14}}>
