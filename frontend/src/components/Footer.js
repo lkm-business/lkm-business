@@ -15,7 +15,6 @@ export default function Footer() {
           <div style={{fontSize: 12, fontWeight: 600, marginBottom: 10, opacity: 0.9}}>Boutique</div>
           <div style={{display: 'flex', flexDirection: 'column', gap: 6}}>
             <Link to="/" style={linkStyle}>Tous les produits</Link>
-            <Link to="/promotions" style={linkStyle}>Promotions</Link>
             <Link to="/?cat=iptv" style={linkStyle}>IPTV</Link>
           </div>
         </div>

@@ -69,7 +69,6 @@ export default function Navbar() {
       <div style={{display: 'flex', gap: 20, padding: '8px 24px', background: 'white', borderBottom: '0.5px solid #e5e5e5', overflowX: 'auto'}}>
         <Link to="/" style={navLinkStyle}>Accueil</Link>
         <button onClick={goProduits} style={{...navLinkStyle, background: 'none', border: 'none', cursor: 'pointer', padding: 0}}>Produits</button>
-        <Link to="/promotions" style={navLinkStyle}>Promotions</Link>
         <Link to="/contact" style={navLinkStyle}>Contact</Link>
       </div>
     </div>
