@@ -4,6 +4,7 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import Navbar from './components/Navbar';
 import CartDrawer from './components/CartDrawer';
+import Footer from './components/Footer';
 import Boutique from './pages/Boutique';
 import Connexion from './pages/Connexion';
 import Compte from './pages/Compte';
@@ -32,6 +33,7 @@ export default function App() {
             <Route path="/commande/succes" element={<ProtectedRoute><OrderSuccess /></ProtectedRoute>} />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
+          <Footer />
         </BrowserRouter>
       </CartProvider>
     </AuthProvider>

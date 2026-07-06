@@ -32,16 +32,16 @@ export default function Compte() {
           {user?.nom?.split(' ').map(x=>x[0]).join('').toUpperCase().slice(0,2)}
         </div>
         <div>
-          <div style={{fontWeight:500,fontSize:15,color:'white'}}>{user?.nom}</div>
-          <div style={{fontSize:12,color:'#cbd5d2'}}>{user?.email}</div>
+          <div style={{fontWeight:500,fontSize:15}}>{user?.nom}</div>
+          <div style={{fontSize:12,color:'#888'}}>{user?.email}</div>
         </div>
       </div>
 
-      <h3 style={{fontSize:14,fontWeight:500,marginBottom:12,color:'white'}}>📅 Mes abonnements</h3>
+      <h3 style={{fontSize:14,fontWeight:500,marginBottom:12}}>📅 Mes abonnements</h3>
 
-      {loading ? <p style={{color:'#cbd5d2'}}>Chargement...</p>
+      {loading ? <p style={{color:'#888'}}>Chargement...</p>
       : abonnements.length === 0 ? (
-        <div style={{textAlign:'center',padding:'40px 0',color:'#cbd5d2'}}>
+        <div style={{textAlign:'center',padding:'40px 0',color:'#888'}}>
           <div style={{fontSize:32,marginBottom:8}}>📺</div>
           <p>Aucun abonnement actif</p>
           <p style={{fontSize:12}}>Abonnez-vous depuis la boutique</p>
