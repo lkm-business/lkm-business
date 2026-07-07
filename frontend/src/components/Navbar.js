@@ -61,7 +61,7 @@ export default function Navbar() {
         </div>
       </nav>
 
-      <div style={{display: 'flex', gap: 24, padding: '8px 24px', background: 'white', borderBottom: '0.5px solid #e5e5e5', overflowX: 'auto'}}>
+      <div style={{display: 'flex', gap: 24, padding: '8px 24px', background: 'white', borderBottom: '0.5px solid #e5e5e5', overflow: 'visible', flexWrap: 'wrap'}}>
         <Link to="/" style={navLinkStyle}>Accueil</Link>
 
         <div className="nav-dropdown">

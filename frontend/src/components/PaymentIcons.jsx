@@ -1,19 +1,9 @@
 export function OrangeMoneyIcon() {
-  return (
-    <svg width="36" height="24" viewBox="0 0 36 24" xmlns="http://www.w3.org/2000/svg" aria-label="Orange Money">
-      <rect width="36" height="24" rx="4" fill="#FF7900" />
-      <text x="18" y="16" textAnchor="middle" fontSize="10" fontWeight="700" fill="white" fontFamily="Arial, sans-serif">OM</text>
-    </svg>
-  );
+  return <img src="/images/OM.jpeg" alt="Orange Money" width="36" height="24" style={{borderRadius: 4, objectFit: 'cover'}} />;
 }
 
 export function WaveIcon() {
-  return (
-    <svg width="36" height="24" viewBox="0 0 36 24" xmlns="http://www.w3.org/2000/svg" aria-label="Wave">
-      <rect width="36" height="24" rx="4" fill="#1DC3F0" />
-      <path d="M6 15c2-6 4-6 6 0s4 6 6 0 4-6 6 0 4 6 6 0" stroke="white" strokeWidth="1.6" fill="none" strokeLinecap="round" />
-    </svg>
-  );
+  return <img src="/images/wave.png" alt="Wave" width="36" height="24" style={{borderRadius: 4, objectFit: 'cover'}} />;
 }
 
 export function StripeIcon() {
@@ -26,13 +16,7 @@ export function StripeIcon() {
 }
 
 export function PaypalIcon() {
-  return (
-    <svg width="36" height="24" viewBox="0 0 36 24" xmlns="http://www.w3.org/2000/svg" aria-label="PayPal">
-      <rect width="36" height="24" rx="4" fill="white" />
-      <text x="11" y="17" fontSize="14" fontWeight="700" fill="#003087" fontFamily="Arial, sans-serif">P</text>
-      <text x="18" y="17" fontSize="14" fontWeight="700" fill="#009cde" fontFamily="Arial, sans-serif">P</text>
-    </svg>
-  );
+  return <img src="/images/paypal.jpeg" alt="PayPal" width="36" height="24" style={{borderRadius: 4, objectFit: 'cover'}} />;
 }
 
 export function VisaIcon() {
