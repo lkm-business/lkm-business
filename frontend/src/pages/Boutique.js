@@ -65,13 +65,13 @@ export default function Boutique() {
     <div>
       {/* Hero */}
       {showHome && (
-        <div style={{position: 'relative', height: 420, overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', color: 'white'}}>
+        <div style={{position: 'relative', minHeight: 'min(420px, 90vh)', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', color: 'white', padding: '48px 0'}}>
           <img src={flickrImg('headphones,speaker', 99, 1600, 800)} alt="" style={{position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover'}} />
           <div style={{position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.6)'}} />
           <div style={{position: 'relative', zIndex: 2, maxWidth: 640, padding: '0 24px'}}>
-            <div style={{fontSize: 12, fontWeight: 600, letterSpacing: 1, opacity: 0.85, marginBottom: 10, textTransform: 'uppercase'}}>" Toi-même faut voir "</div>
-            <h1 style={{fontSize: 34, fontWeight: 700, marginBottom: 14, lineHeight: 1.2}}>Découvrez la meilleure qualité sonore</h1>
-            <p style={{fontSize: 14, opacity: 0.9, marginBottom: 22}}>Montres connectées, audio premium, streaming et IPTV — livrés rapidement, payés en toute sécurité.</p>
+            <div style={{fontSize: 'clamp(11px, 3vw, 12px)', fontWeight: 600, letterSpacing: 1, opacity: 0.85, marginBottom: 10, textTransform: 'uppercase'}}>" Toi-même faut voir "</div>
+            <h1 style={{fontSize: 'clamp(24px, 6vw, 34px)', fontWeight: 700, marginBottom: 14, lineHeight: 1.2}}>Découvrez la meilleure qualité sonore</h1>
+            <p style={{fontSize: 'clamp(13px, 3vw, 14px)', opacity: 0.9, marginBottom: 22}}>Montres connectées, audio premium, streaming et IPTV — livrés rapidement, payés en toute sécurité.</p>
             <button onClick={() => document.getElementById('produits')?.scrollIntoView({behavior: 'smooth'})} style={{
               background: 'white', color: '#0F6E56', border: 'none', padding: '12px 26px', borderRadius: 30,
               fontSize: 14, fontWeight: 700, cursor: 'pointer'
