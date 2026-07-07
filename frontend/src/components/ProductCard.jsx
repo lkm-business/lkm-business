@@ -14,14 +14,10 @@ export default function ProductCard({ produit, badge, suffix, onAdd, onInfo, add
           fontSize: 10, fontWeight: 600, padding: '3px 8px', borderRadius: 20, zIndex: 1
         }}>{badge}</span>
       )}
-      {onInfo && (
-        <button onClick={onInfo} title="Voir les détails" style={{
-          position: 'absolute', top: 8, right: 8, zIndex: 1, width: 24, height: 24, borderRadius: '50%',
-          background: 'rgba(255,255,255,0.15)', border: 'none', color: 'white', fontSize: 13, fontWeight: 700,
-          cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center'
-        }}>i</button>
-      )}
-      <div style={{aspectRatio: '1 / 1', background: '#1a1a1a', borderRadius: 10, overflow: 'hidden', marginBottom: 10}}>
+      <div
+        onClick={onInfo}
+        style={{aspectRatio: '1 / 1', background: '#1a1a1a', borderRadius: 10, overflow: 'hidden', marginBottom: 10, cursor: onInfo ? 'pointer' : 'default'}}
+      >
         <img
           src={produitImg(produit)}
           alt={produit.nom}
@@ -38,12 +34,22 @@ export default function ProductCard({ produit, badge, suffix, onAdd, onInfo, add
       <div style={{fontSize: 14, fontWeight: 700, color: '#2DD4A7', marginBottom: 8}}>
         {fmt(produit.prix)}{suffix && <span style={{fontSize: 10, color: '#999', fontWeight: 500}}>{suffix}</span>}
       </div>
-      <button onClick={onAdd} style={{
-        width: '100%', padding: 8, background: '#1D9E75', color: 'white', border: 'none',
-        borderRadius: 8, fontSize: 12, fontWeight: 600, cursor: 'pointer'
-      }}>
-        {addLabel || '+ Ajouter'}
-      </button>
+      <div style={{display: 'flex', gap: 6}}>
+        {onInfo && (
+          <button onClick={onInfo} title="Voir les détails" style={{
+            flex: '0 0 auto', padding: '0 10px', background: 'white', border: 'none', color: '#111',
+            borderRadius: 8, cursor: 'pointer', fontSize: 13, fontWeight: 700
+          }}>
+            ℹ️
+          </button>
+        )}
+        <button onClick={onAdd} style={{
+          flex: 1, padding: 8, background: '#1D9E75', color: 'white', border: 'none',
+          borderRadius: 8, fontSize: 12, fontWeight: 600, cursor: 'pointer'
+        }}>
+          {addLabel || '+ Ajouter'}
+        </button>
+      </div>
     </div>
   );
 }
