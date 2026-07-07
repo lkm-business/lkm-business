@@ -163,7 +163,9 @@ INSERT INTO produits (nom, slug, prix, type, categorie_id, stock) VALUES
   ('AirPods Pro 2', 'airpods-pro-2', 10000, 'physique', 2, 20),
   ('AirPods Pro 3', 'airpods-pro-3', 15000, 'physique', 2, 15),
   ('AirPods 4', 'airpods-4', 15000, 'physique', 2, 25),
-  ('Tripod Live', 'tripod-live', 20000, 'physique', 3, 60);
+  ('Tripod Live', 'tripod-live', 20000, 'physique', 3, 60),
+  ('Lenovo LP75', 'lenovo-lp75', 15000, 'physique', 2, 30),
+  ('HW11 Mini', 'hw11-mini', 25000, 'physique', 1, 30);
 
 -- ============================================
 -- DONNÉES INITIALES: Produits numériques (streaming)
@@ -219,3 +221,11 @@ UPDATE produits SET image_principale = '/images/airpodspro3.jpg' WHERE slug = 'a
 UPDATE produits SET image_principale = '/images/jbl520.jpeg' WHERE slug = 'jbl-tune-520bt';
 UPDATE produits SET image_principale = '/images/jbl720.jpeg' WHERE slug = 'jbl-tune-720bt';
 UPDATE produits SET image_principale = '/images/tripod.jpeg' WHERE slug = 'tripod-live';
+UPDATE produits SET image_principale = '/images/lp75.jpg' WHERE slug = 'lenovo-lp75';
+UPDATE produits SET image_principale = '/images/hw11mini.jpeg' WHERE slug = 'hw11-mini';
+UPDATE produits SET image_principale = '/images/hw11pro.jpeg' WHERE slug = 'hw11-pro';
+UPDATE produits SET image_principale = '/images/hw16.jpeg' WHERE slug = 'hw16-max';
+UPDATE produits SET image_principale = '/images/applemusic.jpg' WHERE slug = 'apple-music';
+UPDATE produits SET image_principale = '/images/crunchyroll.jpeg' WHERE slug = 'crunchyroll';
+UPDATE produits SET image_principale = '/images/primevideo.jpg' WHERE slug = 'prime-video';
+UPDATE produits SET image_principale = '/images/iptv.jpg' WHERE slug IN ('iptv-premium', 'iptv-ultra-premium');
