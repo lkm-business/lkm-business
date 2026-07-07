@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { OrangeMoneyIcon, WaveIcon, StripeIcon, PaypalIcon, VisaIcon, MastercardIcon, TruckIcon } from './PaymentIcons';
+import { TikTokIcon, WhatsAppIcon, SnapchatIcon } from './SocialIcons';
 
 export default function Footer() {
   return (
@@ -30,7 +31,7 @@ export default function Footer() {
         <div>
           <div style={{fontSize: 12, fontWeight: 600, marginBottom: 10, opacity: 0.9}}>Contact</div>
           <div style={{fontSize: 12, opacity: 0.8, lineHeight: 1.8, marginBottom: 10}}>
-            <Link to="/contact" style={linkStyle}>contact@lkmbusiness.com</Link>
+            <Link to="/contact" style={linkStyle}>lkmsuarl@gmail.com</Link>
           </div>
           <div style={{display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 14}}>
             <OrangeMoneyIcon />
@@ -41,10 +42,10 @@ export default function Footer() {
             <MastercardIcon />
             <TruckIcon />
           </div>
-          <div style={{display: 'flex', gap: 12}}>
-            <a href="https://www.tiktok.com/@lkm_suarl" target="_blank" rel="noopener noreferrer" style={socialStyle} aria-label="TikTok">🎵</a>
-            <a href="https://wa.me/message/VK75NLUQCZUIJ1" target="_blank" rel="noopener noreferrer" style={socialStyle} aria-label="WhatsApp">💬</a>
-            <a href="https://www.snapchat.com/add/ns-jusse" target="_blank" rel="noopener noreferrer" style={socialStyle} aria-label="Snapchat">👻</a>
+          <div style={{display: 'flex', gap: 10}}>
+            <a href="https://www.tiktok.com/@lkm_suarl" target="_blank" rel="noopener noreferrer" style={socialStyle} aria-label="TikTok"><TikTokIcon /></a>
+            <a href="https://wa.me/message/VK75NLUQCZUIJ1" target="_blank" rel="noopener noreferrer" style={socialStyle} aria-label="WhatsApp"><WhatsAppIcon /></a>
+            <a href="https://www.snapchat.com/add/ns-jusse" target="_blank" rel="noopener noreferrer" style={socialStyle} aria-label="Snapchat"><SnapchatIcon /></a>
           </div>
         </div>
       </div>
@@ -56,4 +57,4 @@ export default function Footer() {
 }
 
 const linkStyle = { fontSize: 12, color: 'rgba(255,255,255,0.8)', textDecoration: 'none' };
-const socialStyle = { fontSize: 18, textDecoration: 'none', color: 'white', background: 'rgba(255,255,255,0.12)', width: 32, height: 32, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' };
+const socialStyle = { display: 'flex', alignItems: 'center', justifyContent: 'center', lineHeight: 0 };

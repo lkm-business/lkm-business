@@ -30,7 +30,7 @@ body {
 }
 
 /* Menu catégories — dropdown au survol */
-.nav-dropdown { position: relative; padding: 4px 0; }
+.nav-dropdown { position: relative; }
 .nav-dropdown-menu {
   display: none; position: absolute; top: 100%; left: 0; background: white;
   border: 1px solid #e5e5e5; border-radius: 8px; box-shadow: 0 8px 20px rgba(0,0,0,0.12);

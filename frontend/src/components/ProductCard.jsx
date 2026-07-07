@@ -2,7 +2,7 @@ import { produitImg } from '../utils/images';
 
 const fmt = n => Number(n).toLocaleString('fr-FR') + ' FCFA';
 
-export default function ProductCard({ produit, badge, suffix, onAdd, addLabel, width }) {
+export default function ProductCard({ produit, badge, suffix, onAdd, onInfo, addLabel, width }) {
   return (
     <div className="product-card" style={{
       width: width || 165, flexShrink: 0, background: '#111', borderRadius: 14,
@@ -13,6 +13,13 @@ export default function ProductCard({ produit, badge, suffix, onAdd, addLabel, w
           position: 'absolute', top: 8, left: 8, background: '#1D9E75', color: 'white',
           fontSize: 10, fontWeight: 600, padding: '3px 8px', borderRadius: 20, zIndex: 1
         }}>{badge}</span>
+      )}
+      {onInfo && (
+        <button onClick={onInfo} title="Voir les détails" style={{
+          position: 'absolute', top: 8, right: 8, zIndex: 1, width: 24, height: 24, borderRadius: '50%',
+          background: 'rgba(255,255,255,0.15)', border: 'none', color: 'white', fontSize: 13, fontWeight: 700,
+          cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center'
+        }}>i</button>
       )}
       <div style={{aspectRatio: '1 / 1', background: '#1a1a1a', borderRadius: 10, overflow: 'hidden', marginBottom: 10}}>
         <img

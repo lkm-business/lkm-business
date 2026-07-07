@@ -4,11 +4,13 @@ import { useCart } from '../context/CartContext';
 import API from '../utils/api';
 import ProductCard from '../components/ProductCard';
 import IptvCard from '../components/IptvCard';
+import ProductModal from '../components/ProductModal';
 import toast from 'react-hot-toast';
 
 export default function Abonnements() {
   const [produits, setProduits] = useState([]);
   const [iptvSel, setIptvSel] = useState({});
+  const [detailProduit, setDetailProduit] = useState(null);
   const { ajouter } = useCart();
   const location = useLocation();
 
@@ -40,7 +42,7 @@ export default function Abonnements() {
           <h2 style={{fontSize: 16, fontWeight: 700, marginBottom: 14, color: 'white'}}>🎬 Streaming</h2>
           <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(165px,1fr))', gap: 14}}>
             {streaming.map(p => (
-              <ProductCard key={p.id} produit={p} suffix="/mois" addLabel="+ S'abonner" onAdd={() => ajouterProduit(p)} />
+              <ProductCard key={p.id} produit={p} suffix="/mois" addLabel="+ S'abonner" onAdd={() => ajouterProduit(p)} onInfo={() => setDetailProduit(p)} />
             ))}
           </div>
         </div>
@@ -73,6 +75,14 @@ export default function Abonnements() {
           </div>
         </div>
       )}
+
+      <ProductModal
+        produit={detailProduit}
+        onClose={() => setDetailProduit(null)}
+        suffix={detailProduit?.categorie_slug === 'streaming' ? '/mois' : null}
+        addLabel={detailProduit?.categorie_slug === 'streaming' ? "+ S'abonner" : '+ Ajouter au panier'}
+        onAdd={() => detailProduit && ajouterProduit(detailProduit)}
+      />
     </div>
   );
 }

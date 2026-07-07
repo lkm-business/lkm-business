@@ -3,15 +3,16 @@ import { useLocation } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import API from '../utils/api';
 import ProductCard from '../components/ProductCard';
+import ProductModal from '../components/ProductModal';
 import toast from 'react-hot-toast';
 
-function Section({ id, ico, titre, items, onAdd }) {
+function Section({ id, ico, titre, items, onAdd, onInfo }) {
   if (!items.length) return null;
   return (
     <div id={id} style={{marginBottom: 32}}>
       <h2 style={{fontSize: 16, fontWeight: 700, marginBottom: 14, color: 'white'}}>{ico} {titre}</h2>
       <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(165px,1fr))', gap: 14}}>
-        {items.map(p => <ProductCard key={p.id} produit={p} onAdd={() => onAdd(p)} />)}
+        {items.map(p => <ProductCard key={p.id} produit={p} onAdd={() => onAdd(p)} onInfo={() => onInfo(p)} />)}
       </div>
     </div>
   );
@@ -19,6 +20,7 @@ function Section({ id, ico, titre, items, onAdd }) {
 
 export default function Produits() {
   const [produits, setProduits] = useState([]);
+  const [detailProduit, setDetailProduit] = useState(null);
   const { ajouter } = useCart();
   const location = useLocation();
 
@@ -44,9 +46,15 @@ export default function Produits() {
   return (
     <div style={{padding: '32px 24px', minHeight: '60vh'}}>
       <h1 style={{fontSize: 22, fontWeight: 700, color: 'white', marginBottom: 24}}>📦 Nos produits</h1>
-      <Section id="montres" ico="⌚" titre="Montres connectées" items={montres} onAdd={ajouterProduit} />
-      <Section id="audio" ico="🎧" titre="Audio" items={audio} onAdd={ajouterProduit} />
-      <Section id="accessoires" ico="📹" titre="Accessoires" items={accessoires} onAdd={ajouterProduit} />
+      <Section id="montres" ico="⌚" titre="Montres connectées" items={montres} onAdd={ajouterProduit} onInfo={setDetailProduit} />
+      <Section id="audio" ico="🎧" titre="Audio" items={audio} onAdd={ajouterProduit} onInfo={setDetailProduit} />
+      <Section id="accessoires" ico="📹" titre="Accessoires" items={accessoires} onAdd={ajouterProduit} onInfo={setDetailProduit} />
+
+      <ProductModal
+        produit={detailProduit}
+        onClose={() => setDetailProduit(null)}
+        onAdd={() => detailProduit && ajouterProduit(detailProduit)}
+      />
     </div>
   );
 }

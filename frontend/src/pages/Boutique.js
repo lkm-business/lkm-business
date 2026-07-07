@@ -5,6 +5,7 @@ import API from '../utils/api';
 import { flickrImg } from '../utils/images';
 import ProductCard from '../components/ProductCard';
 import IptvCard from '../components/IptvCard';
+import ProductModal from '../components/ProductModal';
 import Testimonials from '../components/Testimonials';
 import toast from 'react-hot-toast';
 
@@ -26,6 +27,7 @@ const fmt = n => Number(n).toLocaleString('fr-FR') + ' FCFA';
 export default function Boutique() {
   const [produits, setProduits] = useState([]);
   const [iptvSel, setIptvSel] = useState({});
+  const [detailProduit, setDetailProduit] = useState(null);
   const { ajouter } = useCart();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -107,6 +109,7 @@ export default function Boutique() {
                 width={170}
                 suffix={p.categorie_slug === 'streaming' ? '/mois' : null}
                 onAdd={() => p.categorie_slug === 'iptv' ? toast('Choisis une formule ci-dessous 👇') : ajouterProduit(p)}
+                onInfo={() => setDetailProduit(p)}
               />
             ))}
           </div>
@@ -150,6 +153,7 @@ export default function Boutique() {
                       badge={bestSellerSlugs.has(p.slug) ? 'Top ventes' : null}
                       suffix={slug === 'streaming' ? '/mois' : null}
                       onAdd={() => ajouterProduit(p)}
+                      onInfo={() => setDetailProduit(p)}
                       addLabel={slug === 'streaming' ? "+ S'abonner" : '+ Ajouter'}
                     />
                   )
@@ -160,6 +164,14 @@ export default function Boutique() {
       </div>
 
       {showHome && <Testimonials />}
+
+      <ProductModal
+        produit={detailProduit}
+        onClose={() => setDetailProduit(null)}
+        suffix={detailProduit?.categorie_slug === 'streaming' ? '/mois' : null}
+        addLabel={detailProduit?.categorie_slug === 'streaming' ? "+ S'abonner" : '+ Ajouter au panier'}
+        onAdd={() => detailProduit && ajouterProduit(detailProduit)}
+      />
     </div>
   );
 }

@@ -229,3 +229,23 @@ UPDATE produits SET image_principale = '/images/applemusic.jpg' WHERE slug = 'ap
 UPDATE produits SET image_principale = '/images/crunchyroll.jpeg' WHERE slug = 'crunchyroll';
 UPDATE produits SET image_principale = '/images/primevideo.jpg' WHERE slug = 'prime-video';
 UPDATE produits SET image_principale = '/images/iptv.jpg' WHERE slug IN ('iptv-premium', 'iptv-ultra-premium');
+
+-- ============================================
+-- DONNÉES: descriptions produits
+-- ============================================
+UPDATE produits SET description = 'Montre connectée HW11 Pro avec écran AMOLED 2.04 pouces (368x448), autonomie jusqu''à 15 jours, 1 Go de mémoire interne, appels Bluetooth mains libres et lecture de musique en local. Livrée avec 3 bracelets interchangeables et compatible marché de cadrans en ligne.' WHERE slug = 'hw11-pro';
+UPDATE produits SET description = 'Montre connectée HW16 Max avec écran Super AMOLED et charge sans fil. Boîtier robuste livré avec plusieurs bracelets interchangeables (silicone, cuir, acier), idéale pour le sport comme pour un usage quotidien.' WHERE slug = 'hw16-max';
+UPDATE produits SET description = 'Montre connectée HW11 Mini, format compact et léger (42 x 36,5 x 9,25 mm), écran AMOLED 1,85 pouce, étanche et compatible Android comme iOS. Autonomie de 2 à 3 jours d''utilisation, jusqu''à 7 jours en veille. Livrée avec 3 bracelets.' WHERE slug = 'hw11-mini';
+UPDATE produits SET description = 'Casque sans fil JBL TUNE 720BT avec son Pure Bass signature JBL, appels mains libres, coussinets pliables et jusqu''à 76h d''autonomie. Disponible en plusieurs coloris.' WHERE slug = 'jbl-tune-720bt';
+UPDATE produits SET description = 'Casque sans fil JBL TUNE 520BT avec son Pure Bass JBL, commandes tactiles, appels mains libres et longue autonomie. Léger et confortable pour un usage prolongé au quotidien.' WHERE slug = 'jbl-tune-520bt';
+UPDATE produits SET description = 'Écouteurs sans fil AirPods Pro 2 avec réduction de bruit active, mode Transparence adaptatif, audio spatial personnalisé et boîtier de charge MagSafe. Jusqu''à 6h d''écoute par charge, 30h au total avec le boîtier.' WHERE slug = 'airpods-pro-2';
+UPDATE produits SET description = 'Écouteurs sans fil AirPods Pro 3 avec réduction de bruit active nouvelle génération, embouts optimisés pour un meilleur maintien et qualité audio Apple haut de gamme. Boîtier de charge compact à autonomie prolongée.' WHERE slug = 'airpods-pro-3';
+UPDATE produits SET description = 'Écouteurs sans fil AirPods 4, design ouvert et confortable, son riche et équilibré, appairage instantané avec les appareils Apple. Boîtier de charge léger inclus.' WHERE slug = 'airpods-4';
+UPDATE produits SET description = 'Kit trépied Tripod Live complet pour créateurs de contenu : trépied extensible, support smartphone, lampe LED, micro-cravate sans fil double, télécommande Bluetooth, câbles et housse de transport inclus. Idéal pour le live, la vidéo et la photo.' WHERE slug = 'tripod-live';
+UPDATE produits SET description = 'Écouteurs sans fil sport Lenovo LP75 avec crochets auriculaires sécurisés et écran LED sur le boîtier affichant le niveau de batterie. Résistants à la transpiration, parfaits pour le sport et les activités intenses.' WHERE slug = 'lenovo-lp75';
+UPDATE produits SET description = 'Abonnement Netflix — accède à un catalogue illimité de films, séries, documentaires et productions originales en streaming. Activation rapide sous 24h.' WHERE slug = 'netflix';
+UPDATE produits SET description = 'Abonnement Prime Video — films, séries et créations originales Amazon en streaming illimité, disponible en HD. Activation rapide.' WHERE slug = 'prime-video';
+UPDATE produits SET description = 'Abonnement Crunchyroll — la plus grande bibliothèque d''anime en streaming, avec simulcasts des derniers épisodes en VOSTFR/VF. Accès illimité pendant toute la durée de l''abonnement.' WHERE slug = 'crunchyroll';
+UPDATE produits SET description = 'Abonnement Apple Music — plus de 100 millions de titres en streaming et en téléchargement, qualité audio Lossless, playlists personnalisées et paroles synchronisées en temps réel.' WHERE slug = 'apple-music';
+UPDATE produits SET description = 'Abonnement IPTV Premium : plus de 18 000 chaînes internationales et 80 000 films/séries en illimité (HD, 4K, SD). Compatible TV, ordinateur, smartphone et tablette, avec service après-vente disponible 7j/7.' WHERE slug = 'iptv-premium';
+UPDATE produits SET description = 'Abonnement IPTV Ultra Premium : plus de 23 000 chaînes internationales en 4K et 128 000 films/séries en illimité. Qualité UHD/4K/HD, compatible tous supports (TV, PC, mobile, tablette), garantie sur toute la période de l''abonnement et support 7j/7.' WHERE slug = 'iptv-ultra-premium';
