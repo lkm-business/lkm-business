@@ -29,13 +29,13 @@ export default function Navbar() {
         </div>
       )}
 
-      <nav style={{display: 'flex', alignItems: 'center', gap: 16, padding: '12px 24px', background: 'white', borderBottom: '0.5px solid #e5e5e5', flexWrap: 'wrap'}}>
-        <Link to="/" style={{textDecoration: 'none', display: 'flex', flexDirection: 'column', lineHeight: 1.1, flexShrink: 0}}>
+      <nav className="navbar-main" style={{display: 'flex', alignItems: 'center', gap: 16, padding: '12px 24px', background: 'white', borderBottom: '0.5px solid #e5e5e5', flexWrap: 'wrap'}}>
+        <Link to="/" className="navbar-logo" style={{textDecoration: 'none', display: 'flex', flexDirection: 'column', lineHeight: 1.1, flexShrink: 0}}>
           <span style={{fontSize: 17, fontWeight: 700, letterSpacing: '0.5px', color: '#111'}}>LKM<span style={{color: '#1D9E75'}}>_BUSINESS</span></span>
           <span style={{fontSize: 9, color: '#888', fontStyle: 'italic'}}>Toi-même faut voir</span>
         </Link>
 
-        <form onSubmit={handleSearch} style={{flex: 1, minWidth: 180, maxWidth: 480, margin: '0 auto', position: 'relative'}}>
+        <form onSubmit={handleSearch} className="navbar-search" style={{flex: 1, minWidth: 180, maxWidth: 480, margin: '0 auto', position: 'relative'}}>
           <input
             value={search}
             onChange={e => setSearch(e.target.value)}
@@ -45,7 +45,7 @@ export default function Navbar() {
           <span style={{position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', fontSize: 13, color: '#999'}}>🔎</span>
         </form>
 
-        <div style={{display: 'flex', alignItems: 'center', gap: 14, flexShrink: 0}}>
+        <div className="navbar-icons" style={{display: 'flex', alignItems: 'center', gap: 14, flexShrink: 0}}>
           <Link to={user ? '/compte' : '/connexion'} style={{display: 'flex', flexDirection: 'column', alignItems: 'center', textDecoration: 'none', color: '#333', fontSize: 10, gap: 2}}>
             <span style={{fontSize: 18}}>👤</span>
             {user ? 'Compte' : 'Connexion'}
@@ -61,7 +61,7 @@ export default function Navbar() {
         </div>
       </nav>
 
-      <div style={{display: 'flex', alignItems: 'center', gap: 24, padding: '8px 24px', background: 'white', borderBottom: '0.5px solid #e5e5e5', overflow: 'visible', flexWrap: 'wrap'}}>
+      <div className="navbar-catrow" style={{display: 'flex', alignItems: 'center', gap: 24, padding: '8px 24px', background: 'white', borderBottom: '0.5px solid #e5e5e5', overflow: 'visible', flexWrap: 'wrap'}}>
         <Link to="/" style={navLinkStyle}>Accueil</Link>
 
         <div className="nav-dropdown">

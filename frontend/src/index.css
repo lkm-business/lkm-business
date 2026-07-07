@@ -1,5 +1,6 @@
 /* LKM_BUSINESS — Reset global */
 * { box-sizing: border-box; margin: 0; padding: 0; }
+html { overflow-x: hidden; }
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   color: #1a1a1a;
@@ -9,7 +10,9 @@ body {
   background-attachment: fixed;
   background-repeat: no-repeat;
   min-height: 100vh;
+  overflow-x: hidden;
 }
+img { max-width: 100%; }
 
 /* Cartes produit — hover animé */
 .product-card { transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease; }
@@ -38,3 +41,13 @@ body {
 }
 .nav-dropdown:hover .nav-dropdown-menu { display: block; }
 .nav-dropdown-menu a:hover { background: #f5f5f5; }
+
+/* Navbar responsive — la recherche passe sous le logo/les icônes sur petit écran */
+@media (max-width: 640px) {
+  .navbar-logo { order: 1; }
+  .navbar-icons { order: 2; margin-left: auto; }
+  .navbar-search { order: 3; flex-basis: 100%; max-width: 100%; margin-top: 4px; }
+  .navbar-catrow { justify-content: flex-start; gap: 16px !important; }
+  .nav-dropdown-menu { max-width: calc(100vw - 32px); }
+}
+
