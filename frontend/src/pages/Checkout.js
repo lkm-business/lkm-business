@@ -5,6 +5,9 @@ import { useAuth } from '../context/AuthContext';
 import API from '../utils/api';
 import toast from 'react-hot-toast';
 
+const WAVE_LINK = 'https://pay.wave.com/m/M_sn_3uSEmuGc6L2n/c/sn/';
+const ORANGE_MONEY_NUMBER = '221784358021';
+
 export default function Checkout() {
   const { items, total, vider } = useCart();
   const { user } = useAuth();
@@ -12,6 +15,7 @@ export default function Checkout() {
   const [methode, setMethode] = useState('');
   const [adresse, setAdresse] = useState('');
   const [loading, setLoading] = useState(false);
+  const [omConfirm, setOmConfirm] = useState(null);
 
   const fmt = n => Number(n).toLocaleString('fr-FR') + ' FCFA';
 
@@ -42,13 +46,13 @@ export default function Checkout() {
           email: user.email
         });
         window.location.href = pay.data.url;
-      } else if (methode === 'cinetpay') {
-        const pay = await API.post('/paiements/cinetpay', {
-          montant: total,
-          commande_id: data.commande.numero,
-          description: 'Commande LKM_BUSINESS'
-        });
-        window.location.href = pay.data.url;
+      } else if (methode === 'wave') {
+        vider();
+        toast.success('Commande enregistrée ! Redirection vers Wave...');
+        window.location.href = WAVE_LINK;
+      } else if (methode === 'orange_money') {
+        vider();
+        setOmConfirm({ montant: total });
       } else {
         toast.success('Commande enregistrée ! Nous vous contacterons pour le paiement.');
         vider();
@@ -61,6 +65,23 @@ export default function Checkout() {
     }
   };
 
+  if (omConfirm) return (
+    <div style={{maxWidth: 460, margin: '48px auto', padding: '0 20px', textAlign: 'center'}}>
+      <div style={{fontSize: 40, marginBottom: 12}}>🧡</div>
+      <h2 style={{color: 'white', fontSize: 18, fontWeight: 600, marginBottom: 10}}>Finalise ton paiement Orange Money</h2>
+      <p style={{color: '#cbd5d2', fontSize: 14, marginBottom: 10}}>
+        Envoie <strong style={{color: '#2DD4A7'}}>{fmt(omConfirm.montant)}</strong> au numéro :
+      </p>
+      <div style={{background: 'white', borderRadius: 10, padding: '14px 20px', fontSize: 22, fontWeight: 700, color: '#FF7900', marginBottom: 16, letterSpacing: 1}}>
+        {ORANGE_MONEY_NUMBER}
+      </div>
+      <p style={{color: '#999', fontSize: 12, marginBottom: 24}}>Tes accès seront activés dès réception du paiement.</p>
+      <button onClick={() => navigate('/compte')} style={{padding: '11px 24px', background: '#1D9E75', color: 'white', border: 'none', borderRadius: 8, fontWeight: 600, cursor: 'pointer'}}>
+        Aller à mon compte
+      </button>
+    </div>
+  );
+
   if (!items.length) return (
     <div style={{textAlign:'center',padding:'60px 20px',color:'#cbd5d2'}}>
       <div style={{fontSize:40,marginBottom:12}}>🛒</div>
@@ -72,7 +93,8 @@ export default function Checkout() {
   );
 
   const METHODES = [
-    { id:'cinetpay', label:'Orange Money / Wave', ico:'📱', desc:'Paiement mobile (CinetPay)' },
+    { id:'wave', label:'Wave', ico:'🌊', desc:'Paiement via lien Wave sécurisé' },
+    { id:'orange_money', label:'Orange Money', ico:'🧡', desc:`Envoi direct au ${ORANGE_MONEY_NUMBER}` },
     { id:'stripe', label:'Carte bancaire', ico:'💳', desc:'Visa, Mastercard via Stripe' },
     { id:'paypal', label:'PayPal', ico:'🅿️', desc:'Paiement PayPal' },
     { id:'livraison', label:'Paiement à la livraison', ico:'🚚', desc:'Cash ou mobile à la réception' },

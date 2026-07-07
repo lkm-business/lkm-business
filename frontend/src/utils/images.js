@@ -31,8 +31,13 @@ const lockFor = (str) => {
   return h % 100;
 };
 
+// Netflix : gros "N" stylisé (noir/rouge) plutôt qu'une photo générique
+const NETFLIX_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400"><rect width="400" height="400" fill="#141414"/><text x="200" y="300" font-family="Arial, Helvetica, sans-serif" font-weight="900" font-size="280" fill="#E50914" text-anchor="middle">N</text></svg>`;
+const NETFLIX_IMG = `data:image/svg+xml,${encodeURIComponent(NETFLIX_SVG)}`;
+
 export const produitImg = (p) => {
   if (p.image_principale) return p.image_principale;
+  if (p.slug === 'netflix') return NETFLIX_IMG;
   const query = IMG_QUERY[p.slug] || CAT_QUERY[p.categorie_slug] || 'technology';
   return `https://loremflickr.com/400/400/${query}?lock=${lockFor(p.id || p.slug)}`;
 };

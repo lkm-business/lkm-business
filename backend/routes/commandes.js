@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const auth = require('../middleware/auth');
+const { notifierWhatsApp } = require('../services/whatsapp');
 
 // POST /api/commandes - créer une commande
 router.post('/', auth, async (req, res) => {
@@ -38,6 +39,16 @@ router.post('/', auth, async (req, res) => {
     }
 
     await client.query('COMMIT');
+
+    // Notifier l'admin sur WhatsApp si la commande contient des produits numériques (accès à créer)
+    const numeriques = articles.filter(a => a.type === 'numerique');
+    if (numeriques.length > 0) {
+      const liste = numeriques.map(a => `- ${a.nom}`).join('\n');
+      notifierWhatsApp(
+        `🔔 Nouvelle commande LKM_BUSINESS #${commande.numero}\n${liste}\nTotal: ${montant_total} FCFA\nPaiement: ${methode_paiement}\nClient: ${req.user.email}\n→ Vérifier le paiement et créer les accès.`
+      );
+    }
+
     res.status(201).json({ commande, message: 'Commande créée avec succès' });
   } catch (err) {
     await client.query('ROLLBACK');
