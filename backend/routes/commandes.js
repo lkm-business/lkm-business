@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const auth = require('../middleware/auth');
 const { notifierWhatsApp } = require('../services/whatsapp');
+const { notifierEmail } = require('../services/email');
 
 // POST /api/commandes - créer une commande
 router.post('/', auth, async (req, res) => {
@@ -44,9 +45,9 @@ router.post('/', auth, async (req, res) => {
     const numeriques = articles.filter(a => a.type === 'numerique');
     if (numeriques.length > 0) {
       const liste = numeriques.map(a => `- ${a.nom}`).join('\n');
-      notifierWhatsApp(
-        `🔔 Nouvelle commande LKM_BUSINESS #${commande.numero}\n${liste}\nTotal: ${montant_total} FCFA\nPaiement: ${methode_paiement}\nClient: ${req.user.email}\n→ Vérifier le paiement et créer les accès.`
-      );
+      const message = `🔔 Nouvelle commande LKM_BUSINESS #${commande.numero}\n${liste}\nTotal: ${montant_total} FCFA\nPaiement: ${methode_paiement}\nClient: ${req.user.email}\n→ Vérifier le paiement et créer les accès.`;
+      notifierWhatsApp(message);
+      notifierEmail(`Nouvelle commande #${commande.numero} — accès à créer`, message);
     }
 
     res.status(201).json({ commande, message: 'Commande créée avec succès' });
