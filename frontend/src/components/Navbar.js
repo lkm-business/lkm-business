@@ -31,8 +31,8 @@ export default function Navbar() {
 
       <nav className="navbar-main" style={{display: 'flex', alignItems: 'center', gap: 16, padding: '12px 24px', background: 'white', borderBottom: '0.5px solid #e5e5e5', flexWrap: 'wrap'}}>
         <Link to="/" className="navbar-logo" style={{textDecoration: 'none', display: 'flex', flexDirection: 'column', lineHeight: 1.1, flexShrink: 0}}>
-          <span style={{fontSize: 17, fontWeight: 700, letterSpacing: '0.5px', color: '#111'}}>LKM<span style={{color: '#1D9E75'}}>_BUSINESS</span></span>
-          <span style={{fontSize: 9, color: '#888', fontStyle: 'italic'}}>Toi-même faut voir</span>
+          <span style={{fontSize: 24, fontWeight: 700, letterSpacing: '0.5px', color: '#111'}}>LKM<span style={{color: '#1D9E75'}}>_BUSINESS</span></span>
+          <span style={{fontSize: 10, color: '#888', fontStyle: 'italic'}}>Toi-même faut voir</span>
         </Link>
 
         <form onSubmit={handleSearch} className="navbar-search" style={{flex: 1, minWidth: 180, maxWidth: 480, margin: '0 auto', position: 'relative'}}>
