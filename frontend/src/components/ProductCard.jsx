@@ -1,8 +1,10 @@
+import { useState } from 'react';
 import { produitImg } from '../utils/images';
 
 const fmt = n => Number(n).toLocaleString('fr-FR') + ' FCFA';
 
 export default function ProductCard({ produit, badge, suffix, onAdd, onInfo, addLabel, width }) {
+  const [qty, setQty] = useState(1);
   return (
     <div className="product-card" style={{
       width: width || 165, flexShrink: 0, background: '#111', borderRadius: 14,
@@ -34,6 +36,17 @@ export default function ProductCard({ produit, badge, suffix, onAdd, onInfo, add
       <div style={{fontSize: 14, fontWeight: 700, color: '#2DD4A7', marginBottom: 8}}>
         {fmt(produit.prix)}{suffix && <span style={{fontSize: 10, color: '#999', fontWeight: 500}}>{suffix}</span>}
       </div>
+      <div style={{display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8}}>
+        <button onClick={() => setQty(q => Math.max(1, q - 1))} style={{
+          width: 22, height: 22, padding: 0, background: '#1a1a1a', border: '1px solid #333', color: 'white',
+          borderRadius: 6, cursor: 'pointer', fontSize: 13, fontWeight: 700
+        }}>−</button>
+        <span style={{fontSize: 12, fontWeight: 600, color: 'white', minWidth: 16, textAlign: 'center'}}>{qty}</span>
+        <button onClick={() => setQty(q => q + 1)} style={{
+          width: 22, height: 22, padding: 0, background: '#1a1a1a', border: '1px solid #333', color: 'white',
+          borderRadius: 6, cursor: 'pointer', fontSize: 13, fontWeight: 700
+        }}>+</button>
+      </div>
       <div style={{display: 'flex', gap: 6}}>
         {onInfo && (
           <button onClick={onInfo} title="Voir les détails" style={{
@@ -43,7 +56,7 @@ export default function ProductCard({ produit, badge, suffix, onAdd, onInfo, add
             ℹ️
           </button>
         )}
-        <button onClick={onAdd} style={{
+        <button onClick={() => onAdd(qty)} style={{
           flex: 1, padding: 8, background: '#1D9E75', color: 'white', border: 'none',
           borderRadius: 8, fontSize: 12, fontWeight: 600, cursor: 'pointer'
         }}>

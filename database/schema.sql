@@ -16,8 +16,10 @@ CREATE TABLE utilisateurs (
   mot_de_passe VARCHAR(255) NOT NULL,
   telephone VARCHAR(20),
   adresse TEXT,
+  photo TEXT,
   role VARCHAR(20) DEFAULT 'client' CHECK (role IN ('client', 'admin')),
   est_verifie BOOLEAN DEFAULT FALSE,
+  est_actif BOOLEAN DEFAULT TRUE,
   token_verification VARCHAR(255),
   cree_le TIMESTAMP DEFAULT NOW(),
   mis_a_jour_le TIMESTAMP DEFAULT NOW()

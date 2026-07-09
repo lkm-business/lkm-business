@@ -12,7 +12,7 @@ function Section({ id, ico, titre, items, onAdd, onInfo }) {
     <div id={id} style={{marginBottom: 32}}>
       <h2 style={{fontSize: 16, fontWeight: 700, marginBottom: 14, color: 'white'}}>{ico} {titre}</h2>
       <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(165px,1fr))', gap: 14}}>
-        {items.map(p => <ProductCard key={p.id} produit={p} onAdd={() => onAdd(p)} onInfo={() => onInfo(p)} />)}
+        {items.map(p => <ProductCard key={p.id} produit={p} onAdd={(qty) => onAdd(p, qty)} onInfo={() => onInfo(p)} />)}
       </div>
     </div>
   );
@@ -34,8 +34,8 @@ export default function Produits() {
     if (el) setTimeout(() => el.scrollIntoView({behavior: 'smooth'}), 100);
   }, [location.hash, produits]);
 
-  const ajouterProduit = (p) => {
-    ajouter(p);
+  const ajouterProduit = (p, quantite=1) => {
+    ajouter(p, null, quantite);
     toast.success(p.nom + ' ajouté !');
   };
 
@@ -53,7 +53,7 @@ export default function Produits() {
       <ProductModal
         produit={detailProduit}
         onClose={() => setDetailProduit(null)}
-        onAdd={() => detailProduit && ajouterProduit(detailProduit)}
+        onAdd={(qty) => detailProduit && ajouterProduit(detailProduit, qty)}
       />
     </div>
   );

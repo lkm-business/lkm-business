@@ -41,6 +41,8 @@ router.post('/connexion', async (req, res) => {
     const user = r.rows[0];
     if (!await bcrypt.compare(mot_de_passe, user.mot_de_passe))
       return res.status(401).json({ message: 'Identifiants incorrects' });
+    if (user.est_actif === false)
+      return res.status(403).json({ message: 'Compte désactivé. Contactez le support pour le réactiver.' });
     const token = jwt.sign(
       { id: user.id, email: user.email, role: user.role },
       process.env.JWT_SECRET,
@@ -58,7 +60,7 @@ router.get('/profil', auth, async (req, res) => {
   try {
     const db = req.app.locals.db;
     const r = await db.query(
-      'SELECT id, nom, email, telephone, adresse, role, cree_le FROM utilisateurs WHERE id=$1',
+      'SELECT id, nom, email, telephone, adresse, photo, role, est_actif, cree_le FROM utilisateurs WHERE id=$1',
       [req.user.id]
     );
     if (!r.rows.length) return res.status(404).json({ message: 'Introuvable' });
@@ -70,14 +72,25 @@ router.get('/profil', auth, async (req, res) => {
 
 // PUT /api/auth/profil
 router.put('/profil', auth, async (req, res) => {
-  const { nom, telephone, adresse } = req.body;
+  const { nom, telephone, adresse, photo } = req.body;
   try {
     const db = req.app.locals.db;
     const r = await db.query(
-      'UPDATE utilisateurs SET nom=$1, telephone=$2, adresse=$3, mis_a_jour_le=NOW() WHERE id=$4 RETURNING id, nom, email, telephone, adresse',
-      [nom, telephone, adresse, req.user.id]
+      'UPDATE utilisateurs SET nom=$1, telephone=$2, adresse=$3, photo=$4, mis_a_jour_le=NOW() WHERE id=$5 RETURNING id, nom, email, telephone, adresse, photo, role, est_actif',
+      [nom, telephone, adresse, photo, req.user.id]
     );
     res.json(r.rows[0]);
+  } catch {
+    res.status(500).json({ message: 'Erreur serveur' });
+  }
+});
+
+// POST /api/auth/desactiver
+router.post('/desactiver', auth, async (req, res) => {
+  try {
+    const db = req.app.locals.db;
+    await db.query('UPDATE utilisateurs SET est_actif=false, mis_a_jour_le=NOW() WHERE id=$1', [req.user.id]);
+    res.json({ message: 'Compte désactivé' });
   } catch {
     res.status(500).json({ message: 'Erreur serveur' });
   }

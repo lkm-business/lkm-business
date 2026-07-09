@@ -1,8 +1,11 @@
+import { useState, useEffect } from 'react';
 import { produitImg } from '../utils/images';
 
 const fmt = n => Number(n).toLocaleString('fr-FR') + ' FCFA';
 
 export default function ProductModal({ produit, onClose, onAdd, addLabel, suffix }) {
+  const [qty, setQty] = useState(1);
+  useEffect(() => { setQty(1); }, [produit?.id]);
   if (!produit) return null;
   return (
     <div onClick={onClose} style={{position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.75)', zIndex: 300, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20}}>
@@ -32,7 +35,20 @@ export default function ProductModal({ produit, onClose, onAdd, addLabel, suffix
           {produit.description || "Aucune description disponible pour ce produit."}
         </p>
 
-        <button onClick={() => { onAdd(); onClose(); }} style={{
+        <div style={{display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14}}>
+          <span style={{fontSize: 13, color: '#ccc', fontWeight: 600}}>Quantité :</span>
+          <button onClick={() => setQty(q => Math.max(1, q - 1))} style={{
+            width: 28, height: 28, padding: 0, background: '#1a1a1a', border: '1px solid #333', color: 'white',
+            borderRadius: 6, cursor: 'pointer', fontSize: 15, fontWeight: 700
+          }}>−</button>
+          <span style={{fontSize: 14, fontWeight: 700, color: 'white', minWidth: 20, textAlign: 'center'}}>{qty}</span>
+          <button onClick={() => setQty(q => q + 1)} style={{
+            width: 28, height: 28, padding: 0, background: '#1a1a1a', border: '1px solid #333', color: 'white',
+            borderRadius: 6, cursor: 'pointer', fontSize: 15, fontWeight: 700
+          }}>+</button>
+        </div>
+
+        <button onClick={() => { onAdd(qty); onClose(); }} style={{
           width: '100%', padding: 12, background: '#1D9E75', color: 'white', border: 'none',
           borderRadius: 8, fontSize: 14, fontWeight: 700, cursor: 'pointer'
         }}>

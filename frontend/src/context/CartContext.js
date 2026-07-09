@@ -6,13 +6,13 @@ export function CartProvider({ children }) {
   const [items, setItems] = useState([]);
   const [open, setOpen] = useState(false);
 
-  const ajouter = (produit, formule = null) => {
+  const ajouter = (produit, formule = null, quantite = 1) => {
     const key = formule ? `${produit.id}-${formule.id}` : `${produit.id}`;
     const prixUnitaire = formule ? formule.prix : produit.prix;
     setItems(prev => {
       const existant = prev.find(i => i.key === key);
       if (existant) {
-        return prev.map(i => i.key === key ? { ...i, quantite: i.quantite + 1 } : i);
+        return prev.map(i => i.key === key ? { ...i, quantite: i.quantite + quantite } : i);
       }
       return [...prev, {
         key,
@@ -20,7 +20,7 @@ export function CartProvider({ children }) {
         formule_iptv_id: formule ? formule.id : null,
         nom: formule ? `${produit.nom} — ${formule.duree_label}` : produit.nom,
         prix: prixUnitaire,
-        quantite: 1,
+        quantite,
         type: produit.type,
         days: formule ? formule.duree_jours : null,
       }];

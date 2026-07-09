@@ -24,8 +24,8 @@ export default function Abonnements() {
     if (el) setTimeout(() => el.scrollIntoView({behavior: 'smooth'}), 100);
   }, [location.hash, produits]);
 
-  const ajouterProduit = (p, formule = null) => {
-    ajouter(p, formule);
+  const ajouterProduit = (p, formule = null, quantite = 1) => {
+    ajouter(p, formule, quantite);
     toast.success((formule ? p.nom + ' — ' + formule.duree_label : p.nom) + ' ajouté !');
   };
 
@@ -42,7 +42,7 @@ export default function Abonnements() {
           <h2 style={{fontSize: 16, fontWeight: 700, marginBottom: 14, color: 'white'}}>🎬 Streaming</h2>
           <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(165px,1fr))', gap: 14}}>
             {streaming.map(p => (
-              <ProductCard key={p.id} produit={p} suffix="/mois" addLabel="+ S'abonner" onAdd={() => ajouterProduit(p)} onInfo={() => setDetailProduit(p)} />
+              <ProductCard key={p.id} produit={p} suffix="/mois" addLabel="+ S'abonner" onAdd={(qty) => ajouterProduit(p, null, qty)} onInfo={() => setDetailProduit(p)} />
             ))}
           </div>
         </div>
@@ -81,7 +81,7 @@ export default function Abonnements() {
         onClose={() => setDetailProduit(null)}
         suffix={detailProduit?.categorie_slug === 'streaming' ? '/mois' : null}
         addLabel={detailProduit?.categorie_slug === 'streaming' ? "+ S'abonner" : '+ Ajouter au panier'}
-        onAdd={() => detailProduit && ajouterProduit(detailProduit)}
+        onAdd={(qty) => detailProduit && ajouterProduit(detailProduit, null, qty)}
       />
     </div>
   );
