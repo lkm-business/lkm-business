@@ -65,6 +65,8 @@ const SLIDES = [
   {
     key: 'streaming',
     bg: 'linear-gradient(135deg, #1a0505, #3d0a0a)',
+    bgImage: '/images/streaming.jpeg',
+    overlay: 'linear-gradient(90deg, rgba(26,5,5,0.92), rgba(61,10,10,0.55))',
     textColor: 'white',
     badge: 'Streaming',
     badgeBg: '#E63946',
@@ -75,8 +77,6 @@ const SLIDES = [
     buttonBg: 'white',
     buttonColor: '#7a1f1f',
     path: '/abonnements#streaming',
-    images: ['/images/primevideo.jpg', '/images/crunchyroll.jpeg', '/images/applemusic.jpg'],
-    netflix: true,
   },
 ];
 
@@ -119,7 +119,7 @@ export default function HeroCarousel() {
               {s.bgImage && (
                 <>
                   <img src={s.bgImage} alt="" style={{position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 0}} />
-                  <div style={{position: 'absolute', inset: 0, background: 'linear-gradient(90deg, rgba(10,22,40,0.92), rgba(10,22,40,0.55))', zIndex: 1}} />
+                  <div style={{position: 'absolute', inset: 0, background: s.overlay || 'linear-gradient(90deg, rgba(10,22,40,0.92), rgba(10,22,40,0.55))', zIndex: 1}} />
                 </>
               )}
 
