@@ -4,17 +4,20 @@ import { useCart } from '../context/CartContext';
 import API from '../utils/api';
 import ProductCard from '../components/ProductCard';
 import ProductModal from '../components/ProductModal';
+import Reveal from '../components/Reveal';
 import toast from 'react-hot-toast';
 
 function Section({ id, ico, titre, items, onAdd, onInfo }) {
   if (!items.length) return null;
   return (
-    <div id={id} style={{marginBottom: 32}}>
-      <h2 style={{fontSize: 16, fontWeight: 700, marginBottom: 14, color: 'white'}}>{ico} {titre}</h2>
-      <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(165px,1fr))', gap: 14}}>
-        {items.map(p => <ProductCard key={p.id} produit={p} onAdd={(qty) => onAdd(p, qty)} onInfo={() => onInfo(p)} />)}
+    <Reveal style={{marginBottom: 32}}>
+      <div id={id}>
+        <h2 style={{fontSize: 16, fontWeight: 700, marginBottom: 14, color: 'white'}}>{ico} {titre}</h2>
+        <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(165px,1fr))', gap: 14}}>
+          {items.map(p => <ProductCard key={p.id} produit={p} onAdd={(qty) => onAdd(p, qty)} onInfo={() => onInfo(p)} />)}
+        </div>
       </div>
-    </div>
+    </Reveal>
   );
 }
 

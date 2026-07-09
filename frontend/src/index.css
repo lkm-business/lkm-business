@@ -14,11 +14,15 @@ body {
 }
 img { max-width: 100%; }
 
-/* Cartes produit — hover animé */
-.product-card { transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease; }
-.product-card:hover { transform: translateY(-4px); box-shadow: 0 10px 24px rgba(15, 110, 86, 0.14); border-color: #1D9E75; }
-.product-img { transition: transform 0.3s ease; }
-.product-card:hover .product-img { transform: scale(1.06); }
+/* Cartes produit — hover animé, inspiré des transitions premium type PlayStation */
+.product-card { transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.45s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.45s ease; }
+.product-card:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 20px 40px rgba(29, 158, 117, 0.25), 0 6px 16px rgba(0, 0, 0, 0.45); border-color: #1D9E75; }
+.product-img { transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+.product-card:hover .product-img { transform: scale(1.1); }
+
+/* Reveal au scroll — fondu + glissement vers le haut */
+.reveal { opacity: 0; transform: translateY(36px); transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
+.reveal-visible { opacity: 1; transform: translateY(0); }
 
 /* Carrousel horizontal */
 .carousel-track { scroll-snap-type: x proximity; }

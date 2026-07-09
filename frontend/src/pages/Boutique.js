@@ -7,11 +7,16 @@ import IptvCard from '../components/IptvCard';
 import ProductModal from '../components/ProductModal';
 import Testimonials from '../components/Testimonials';
 import HeroCarousel from '../components/HeroCarousel';
+import Reveal from '../components/Reveal';
 import toast from 'react-hot-toast';
 
 const ICO = {'montres-connectees':'⌚','audio-premium':'🎧','accessoires':'📹','streaming':'🎬','iptv':'📡'};
 
-const CAT_LABEL = { montres: 'Montres', audio: 'Audio', airpods: 'AirPods', accessoires: 'Accessoires', streaming: 'Streaming', iptv: 'IPTV' };
+const CAT_LABEL = {
+  montres: 'Montres', audio: 'Audio', 'audio-tous': 'Audio (JBL + AirPods)', airpods: 'AirPods',
+  accessoires: 'Accessoires', streaming: 'Streaming', iptv: 'IPTV',
+  'iptv-premium': 'IPTV Premium', 'iptv-ultra-premium': 'IPTV Ultra Premium',
+};
 
 const CATEGORIES = [
   { key: 'montres', label: 'Montres', ico: '⌚' },
@@ -49,6 +54,8 @@ export default function Boutique() {
     if (cat === 'airpods') return nomLower.includes('airpods');
     if (cat === 'montres') return p.categorie_slug === 'montres-connectees';
     if (cat === 'audio') return p.categorie_slug === 'audio-premium' && !nomLower.includes('airpods');
+    if (cat === 'audio-tous') return p.categorie_slug === 'audio-premium';
+    if (cat === 'iptv-premium' || cat === 'iptv-ultra-premium') return p.slug === cat;
     return p.categorie_slug === cat;
   };
   const matchesQuery = (p) => !q || p.nom.toLowerCase().includes(q.toLowerCase());
@@ -82,28 +89,30 @@ export default function Boutique() {
 
       {/* Meilleures ventes */}
       {showHome && bestSellers.length > 0 && (
-        <div id="produits" style={{padding: '28px 24px 6px'}}>
-          <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8, marginBottom: 14}}>
-            <h2 style={{fontSize: 18, fontWeight: 700, color: 'white', margin: 0}}>🔥 Nos meilleures ventes</h2>
-            <div style={{display: 'flex', gap: 14}}>
-              <a href="/produits" style={{fontSize: 12, color: '#2DD4A7', fontWeight: 600, textDecoration: 'none'}}>Produits physiques →</a>
-              <a href="/abonnements" style={{fontSize: 12, color: '#2DD4A7', fontWeight: 600, textDecoration: 'none'}}>Abonnements & IPTV →</a>
+        <Reveal>
+          <div id="produits" style={{padding: '28px 24px 6px'}}>
+            <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8, marginBottom: 14}}>
+              <h2 style={{fontSize: 18, fontWeight: 700, color: 'white', margin: 0}}>🔥 Nos meilleures ventes</h2>
+              <div style={{display: 'flex', gap: 14}}>
+                <a href="/produits" style={{fontSize: 12, color: '#2DD4A7', fontWeight: 600, textDecoration: 'none'}}>Produits physiques →</a>
+                <a href="/abonnements" style={{fontSize: 12, color: '#2DD4A7', fontWeight: 600, textDecoration: 'none'}}>Abonnements & IPTV →</a>
+              </div>
+            </div>
+            <div className="carousel-track" style={{display: 'flex', gap: 14, overflowX: 'auto', paddingBottom: 10}}>
+              {bestSellers.map(p => (
+                <ProductCard
+                  key={p.id}
+                  produit={p}
+                  badge="Top ventes"
+                  width={170}
+                  suffix={p.categorie_slug === 'streaming' ? '/mois' : null}
+                  onAdd={(qty) => p.categorie_slug === 'iptv' ? toast('Choisis une formule ci-dessous 👇') : ajouterProduit(p, null, qty)}
+                  onInfo={() => setDetailProduit(p)}
+                />
+              ))}
             </div>
           </div>
-          <div className="carousel-track" style={{display: 'flex', gap: 14, overflowX: 'auto', paddingBottom: 10}}>
-            {bestSellers.map(p => (
-              <ProductCard
-                key={p.id}
-                produit={p}
-                badge="Top ventes"
-                width={170}
-                suffix={p.categorie_slug === 'streaming' ? '/mois' : null}
-                onAdd={(qty) => p.categorie_slug === 'iptv' ? toast('Choisis une formule ci-dessous 👇') : ajouterProduit(p, null, qty)}
-                onInfo={() => setDetailProduit(p)}
-              />
-            ))}
-          </div>
-        </div>
+        </Reveal>
       )}
 
       {!showHome && (
@@ -118,8 +127,8 @@ export default function Boutique() {
             <div style={{textAlign: 'center', padding: '40px 0', color: '#cbd5d2'}}>Aucun produit ne correspond à ta recherche.</div>
           )}
 
-          {slugs.map(slug => (
-            <div key={slug} style={{marginBottom: 28}}>
+          {slugs.map((slug, si) => (
+            <Reveal key={slug} delay={si * 80} style={{marginBottom: 28}}>
               <div style={{fontSize: 14, fontWeight: 700, marginBottom: 12, color: 'white'}}>
                 {ICO[slug] || '📦'} {filtered.find(p => p.categorie_slug === slug)?.categorie_nom}
               </div>
@@ -148,7 +157,7 @@ export default function Boutique() {
                     )
                 ))}
               </div>
-            </div>
+            </Reveal>
           ))}
         </div>
       )}

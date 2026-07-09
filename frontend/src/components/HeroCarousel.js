@@ -106,7 +106,7 @@ export default function HeroCarousel() {
       <div style={{
         display: 'flex', width: `${N * 100}%`, height: '100%',
         transform: `translateX(-${index * (100 / N)}%)`,
-        transition: 'transform 0.7s ease',
+        transition: 'transform 0.85s cubic-bezier(0.65, 0, 0.35, 1)',
       }}>
         {SLIDES.map((s, i) => {
           const active = i === index;

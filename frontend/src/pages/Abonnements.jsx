@@ -5,6 +5,7 @@ import API from '../utils/api';
 import ProductCard from '../components/ProductCard';
 import IptvCard from '../components/IptvCard';
 import ProductModal from '../components/ProductModal';
+import Reveal from '../components/Reveal';
 import toast from 'react-hot-toast';
 
 export default function Abonnements() {
@@ -38,42 +39,48 @@ export default function Abonnements() {
       <h1 style={{fontSize: 22, fontWeight: 700, color: 'white', marginBottom: 24}}>📺 Abonnements & IPTV</h1>
 
       {streaming.length > 0 && (
-        <div id="streaming" style={{marginBottom: 32}}>
-          <h2 style={{fontSize: 16, fontWeight: 700, marginBottom: 14, color: 'white'}}>🎬 Streaming</h2>
-          <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(165px,1fr))', gap: 14}}>
-            {streaming.map(p => (
-              <ProductCard key={p.id} produit={p} suffix="/mois" addLabel="+ S'abonner" onAdd={(qty) => ajouterProduit(p, null, qty)} onInfo={() => setDetailProduit(p)} />
-            ))}
+        <Reveal style={{marginBottom: 32}}>
+          <div id="streaming">
+            <h2 style={{fontSize: 16, fontWeight: 700, marginBottom: 14, color: 'white'}}>🎬 Streaming</h2>
+            <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(165px,1fr))', gap: 14}}>
+              {streaming.map(p => (
+                <ProductCard key={p.id} produit={p} suffix="/mois" addLabel="+ S'abonner" onAdd={(qty) => ajouterProduit(p, null, qty)} onInfo={() => setDetailProduit(p)} />
+              ))}
+            </div>
           </div>
-        </div>
+        </Reveal>
       )}
 
       {iptvPremium && (
-        <div id="iptv-premium" style={{marginBottom: 32}}>
-          <h2 style={{fontSize: 16, fontWeight: 700, marginBottom: 14, color: 'white'}}>📡 IPTV Premium</h2>
-          <div style={{maxWidth: 320}}>
-            <IptvCard
-              produit={iptvPremium}
-              selected={iptvSel[iptvPremium.id]}
-              onSelectFormule={f => setIptvSel(s => ({...s, [iptvPremium.id]: f}))}
-              onAdd={() => { if (iptvSel[iptvPremium.id]) ajouterProduit(iptvPremium, iptvSel[iptvPremium.id]); }}
-            />
+        <Reveal delay={80} style={{marginBottom: 32}}>
+          <div id="iptv-premium">
+            <h2 style={{fontSize: 16, fontWeight: 700, marginBottom: 14, color: 'white'}}>📡 IPTV Premium</h2>
+            <div style={{maxWidth: 320}}>
+              <IptvCard
+                produit={iptvPremium}
+                selected={iptvSel[iptvPremium.id]}
+                onSelectFormule={f => setIptvSel(s => ({...s, [iptvPremium.id]: f}))}
+                onAdd={() => { if (iptvSel[iptvPremium.id]) ajouterProduit(iptvPremium, iptvSel[iptvPremium.id]); }}
+              />
+            </div>
           </div>
-        </div>
+        </Reveal>
       )}
 
       {iptvUltra && (
-        <div id="iptv-ultra-premium" style={{marginBottom: 32}}>
-          <h2 style={{fontSize: 16, fontWeight: 700, marginBottom: 14, color: 'white'}}>🛰️ IPTV Ultra Premium</h2>
-          <div style={{maxWidth: 320}}>
-            <IptvCard
-              produit={iptvUltra}
-              selected={iptvSel[iptvUltra.id]}
-              onSelectFormule={f => setIptvSel(s => ({...s, [iptvUltra.id]: f}))}
-              onAdd={() => { if (iptvSel[iptvUltra.id]) ajouterProduit(iptvUltra, iptvSel[iptvUltra.id]); }}
-            />
+        <Reveal delay={160} style={{marginBottom: 32}}>
+          <div id="iptv-ultra-premium">
+            <h2 style={{fontSize: 16, fontWeight: 700, marginBottom: 14, color: 'white'}}>🛰️ IPTV Ultra Premium</h2>
+            <div style={{maxWidth: 320}}>
+              <IptvCard
+                produit={iptvUltra}
+                selected={iptvSel[iptvUltra.id]}
+                onSelectFormule={f => setIptvSel(s => ({...s, [iptvUltra.id]: f}))}
+                onAdd={() => { if (iptvSel[iptvUltra.id]) ajouterProduit(iptvUltra, iptvSel[iptvUltra.id]); }}
+              />
+            </div>
           </div>
-        </div>
+        </Reveal>
       )}
 
       <ProductModal

@@ -73,18 +73,18 @@ export default function Navbar() {
         <div className="nav-dropdown">
           <span style={navLinkStyle}>Produits physiques ▾</span>
           <div className="nav-dropdown-menu">
-            <Link to="/produits#montres" style={dropdownItemStyle}>Montres connectées</Link>
-            <Link to="/produits#audio" style={dropdownItemStyle}>Audio (JBL + AirPods)</Link>
-            <Link to="/produits#accessoires" style={dropdownItemStyle}>Accessoires</Link>
+            <Link to="/?cat=montres" style={dropdownItemStyle}>Montres connectées</Link>
+            <Link to="/?cat=audio-tous" style={dropdownItemStyle}>Audio (JBL + AirPods)</Link>
+            <Link to="/?cat=accessoires" style={dropdownItemStyle}>Accessoires</Link>
           </div>
         </div>
 
         <div className="nav-dropdown">
           <span style={navLinkStyle}>Abonnements & IPTV ▾</span>
           <div className="nav-dropdown-menu">
-            <Link to="/abonnements#streaming" style={dropdownItemStyle}>Streaming (Netflix, Prime, Crunchyroll, Apple Music)</Link>
-            <Link to="/abonnements#iptv-premium" style={dropdownItemStyle}>IPTV Premium</Link>
-            <Link to="/abonnements#iptv-ultra-premium" style={dropdownItemStyle}>IPTV Ultra Premium</Link>
+            <Link to="/?cat=streaming" style={dropdownItemStyle}>Streaming (Netflix, Prime, Crunchyroll, Apple Music)</Link>
+            <Link to="/?cat=iptv-premium" style={dropdownItemStyle}>IPTV Premium</Link>
+            <Link to="/?cat=iptv-ultra-premium" style={dropdownItemStyle}>IPTV Ultra Premium</Link>
           </div>
         </div>
 
