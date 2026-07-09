@@ -98,8 +98,14 @@ export default function Boutique() {
 
       {/* Meilleures ventes */}
       {showHome && bestSellers.length > 0 && (
-        <div style={{padding: '28px 24px 6px'}}>
-          <h2 style={{fontSize: 18, fontWeight: 700, marginBottom: 14, color: 'white'}}>🔥 Nos meilleures ventes</h2>
+        <div id="produits" style={{padding: '28px 24px 6px'}}>
+          <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8, marginBottom: 14}}>
+            <h2 style={{fontSize: 18, fontWeight: 700, color: 'white', margin: 0}}>🔥 Nos meilleures ventes</h2>
+            <div style={{display: 'flex', gap: 14}}>
+              <a href="/produits" style={{fontSize: 12, color: '#2DD4A7', fontWeight: 600, textDecoration: 'none'}}>Produits physiques →</a>
+              <a href="/abonnements" style={{fontSize: 12, color: '#2DD4A7', fontWeight: 600, textDecoration: 'none'}}>Abonnements & IPTV →</a>
+            </div>
+          </div>
           <div className="carousel-track" style={{display: 'flex', gap: 14, overflowX: 'auto', paddingBottom: 10}}>
             {bestSellers.map(p => (
               <ProductCard
@@ -116,52 +122,52 @@ export default function Boutique() {
         </div>
       )}
 
-      <div id="produits" style={{padding: '20px 24px 6px'}}>
-        {!showHome && (
+      {!showHome && (
+        <div style={{padding: '20px 24px 6px'}}>
           <div style={{marginBottom: 8, fontSize: 13, color: '#cbd5d2'}}>
             {q ? `Résultats pour « ${q} »` : `Catégorie : ${CAT_LABEL[cat] || cat}`}
             {' — '}
             <a href="/" style={{color: '#2DD4A7', fontWeight: 600, textDecoration: 'none'}}>Réinitialiser</a>
           </div>
-        )}
 
-        {filtered.length === 0 && !showHome && (
-          <div style={{textAlign: 'center', padding: '40px 0', color: '#cbd5d2'}}>Aucun produit ne correspond à ta recherche.</div>
-        )}
+          {filtered.length === 0 && (
+            <div style={{textAlign: 'center', padding: '40px 0', color: '#cbd5d2'}}>Aucun produit ne correspond à ta recherche.</div>
+          )}
 
-        {slugs.map(slug => (
-          <div key={slug} style={{marginBottom: 28}}>
-            <div style={{fontSize: 14, fontWeight: 700, marginBottom: 12, color: 'white'}}>
-              {ICO[slug] || '📦'} {filtered.find(p => p.categorie_slug === slug)?.categorie_nom}
+          {slugs.map(slug => (
+            <div key={slug} style={{marginBottom: 28}}>
+              <div style={{fontSize: 14, fontWeight: 700, marginBottom: 12, color: 'white'}}>
+                {ICO[slug] || '📦'} {filtered.find(p => p.categorie_slug === slug)?.categorie_nom}
+              </div>
+              <div style={{display: 'grid', gridTemplateColumns: slug === 'iptv' ? 'repeat(auto-fill,minmax(260px,1fr))' : 'repeat(auto-fill,minmax(165px,1fr))', gap: 14}}>
+                {filtered.filter(p => p.categorie_slug === slug).map(p => (
+                  slug === 'iptv'
+                    ? (
+                      <IptvCard
+                        key={p.id}
+                        produit={p}
+                        selected={iptvSel[p.id]}
+                        onSelectFormule={f => setIptvSel(s => ({...s, [p.id]: f}))}
+                        onAdd={() => { if (iptvSel[p.id]) ajouterProduit(p, iptvSel[p.id]); }}
+                      />
+                    )
+                    : (
+                      <ProductCard
+                        key={p.id}
+                        produit={p}
+                        badge={bestSellerSlugs.has(p.slug) ? 'Top ventes' : null}
+                        suffix={slug === 'streaming' ? '/mois' : null}
+                        onAdd={(qty) => ajouterProduit(p, null, qty)}
+                        onInfo={() => setDetailProduit(p)}
+                        addLabel={slug === 'streaming' ? "+ S'abonner" : '+ Ajouter'}
+                      />
+                    )
+                ))}
+              </div>
             </div>
-            <div style={{display: 'grid', gridTemplateColumns: slug === 'iptv' ? 'repeat(auto-fill,minmax(260px,1fr))' : 'repeat(auto-fill,minmax(165px,1fr))', gap: 14}}>
-              {filtered.filter(p => p.categorie_slug === slug).map(p => (
-                slug === 'iptv'
-                  ? (
-                    <IptvCard
-                      key={p.id}
-                      produit={p}
-                      selected={iptvSel[p.id]}
-                      onSelectFormule={f => setIptvSel(s => ({...s, [p.id]: f}))}
-                      onAdd={() => { if (iptvSel[p.id]) ajouterProduit(p, iptvSel[p.id]); }}
-                    />
-                  )
-                  : (
-                    <ProductCard
-                      key={p.id}
-                      produit={p}
-                      badge={bestSellerSlugs.has(p.slug) ? 'Top ventes' : null}
-                      suffix={slug === 'streaming' ? '/mois' : null}
-                      onAdd={(qty) => ajouterProduit(p, null, qty)}
-                      onInfo={() => setDetailProduit(p)}
-                      addLabel={slug === 'streaming' ? "+ S'abonner" : '+ Ajouter'}
-                    />
-                  )
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
 
       {showHome && <Testimonials />}
 
