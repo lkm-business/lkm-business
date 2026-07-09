@@ -33,6 +33,7 @@ app.use(express.urlencoded({ extended: true }));
 // ============================================
 app.use('/api/auth',      require('./routes/auth'));
 app.use('/api/produits',  require('./routes/produits'));
+app.use('/api/categories', require('./routes/categories'));
 app.use('/api/commandes', require('./routes/commandes'));
 app.use('/api/abonnements', require('./routes/abonnements'));
 app.use('/api/paiements', require('./routes/paiements'));

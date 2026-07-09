@@ -5,6 +5,7 @@ const fmt = n => Number(n).toLocaleString('fr-FR') + ' FCFA';
 
 export default function ProductCard({ produit, badge, suffix, onAdd, onInfo, addLabel, width }) {
   const [qty, setQty] = useState(1);
+  const enPromo = produit.prix_promo && Number(produit.prix_promo) < Number(produit.prix);
   return (
     <div className="product-card" style={{
       width: width || 165, flexShrink: 0, background: '#111', borderRadius: 14,
@@ -15,6 +16,12 @@ export default function ProductCard({ produit, badge, suffix, onAdd, onInfo, add
           position: 'absolute', top: 8, left: 8, background: '#1D9E75', color: 'white',
           fontSize: 10, fontWeight: 600, padding: '3px 8px', borderRadius: 20, zIndex: 1
         }}>{badge}</span>
+      )}
+      {enPromo && (
+        <span style={{
+          position: 'absolute', top: 8, right: 8, background: '#E63946', color: 'white',
+          fontSize: 10, fontWeight: 700, padding: '3px 8px', borderRadius: 20, zIndex: 1
+        }}>PROMO</span>
       )}
       <div
         onClick={onInfo}
@@ -33,8 +40,9 @@ export default function ProductCard({ produit, badge, suffix, onAdd, onInfo, add
         background: '#E1F5EE', color: '#0F6E56', marginBottom: 6, textTransform: 'uppercase', letterSpacing: 0.3
       }}>{produit.categorie_nom}</span>
       <div style={{fontSize: 13, fontWeight: 600, marginBottom: 4, minHeight: 32, color: 'white'}}>{produit.nom}</div>
-      <div style={{fontSize: 14, fontWeight: 700, color: '#2DD4A7', marginBottom: 8}}>
-        {fmt(produit.prix)}{suffix && <span style={{fontSize: 10, color: '#999', fontWeight: 500}}>{suffix}</span>}
+      <div style={{fontSize: 14, fontWeight: 700, color: '#2DD4A7', marginBottom: 8, display: 'flex', alignItems: 'baseline', gap: 6, flexWrap: 'wrap'}}>
+        {enPromo && <span style={{fontSize: 11, color: '#777', fontWeight: 500, textDecoration: 'line-through'}}>{fmt(produit.prix)}</span>}
+        {fmt(enPromo ? produit.prix_promo : produit.prix)}{suffix && <span style={{fontSize: 10, color: '#999', fontWeight: 500}}>{suffix}</span>}
       </div>
       <div style={{display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8}}>
         <button onClick={() => setQty(q => Math.max(1, q - 1))} style={{

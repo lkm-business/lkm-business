@@ -7,6 +7,7 @@ export default function ProductModal({ produit, onClose, onAdd, addLabel, suffix
   const [qty, setQty] = useState(1);
   useEffect(() => { setQty(1); }, [produit?.id]);
   if (!produit) return null;
+  const enPromo = produit.prix_promo && Number(produit.prix_promo) < Number(produit.prix);
   return (
     <div onClick={onClose} style={{position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.75)', zIndex: 300, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20}}>
       <div onClick={e => e.stopPropagation()} style={{background: '#111', borderRadius: 16, maxWidth: 420, width: '100%', maxHeight: '85vh', overflowY: 'auto', padding: 22, position: 'relative', border: '1px solid #262626'}}>
@@ -27,8 +28,9 @@ export default function ProductModal({ produit, onClose, onAdd, addLabel, suffix
 
         <h3 style={{color: 'white', fontSize: 19, fontWeight: 700, marginBottom: 8}}>{produit.nom}</h3>
 
-        <div style={{color: '#2DD4A7', fontWeight: 700, fontSize: 17, marginBottom: 14}}>
-          {fmt(produit.prix)}{suffix && <span style={{fontSize: 12, color: '#999', fontWeight: 500}}>{suffix}</span>}
+        <div style={{color: '#2DD4A7', fontWeight: 700, fontSize: 17, marginBottom: 14, display: 'flex', alignItems: 'baseline', gap: 8, flexWrap: 'wrap'}}>
+          {enPromo && <span style={{fontSize: 13, color: '#777', fontWeight: 500, textDecoration: 'line-through'}}>{fmt(produit.prix)}</span>}
+          {fmt(enPromo ? produit.prix_promo : produit.prix)}{suffix && <span style={{fontSize: 12, color: '#999', fontWeight: 500}}>{suffix}</span>}
         </div>
 
         <p style={{color: '#ccc', fontSize: 13.5, lineHeight: 1.7, marginBottom: 20}}>

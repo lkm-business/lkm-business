@@ -50,6 +50,12 @@ export default function Navbar() {
             <span style={{fontSize: 18}}>👤</span>
             {user ? 'Compte' : 'Connexion'}
           </Link>
+          {user?.role === 'admin' && (
+            <Link to="/admin" style={{display: 'flex', flexDirection: 'column', alignItems: 'center', textDecoration: 'none', color: '#1D9E75', fontSize: 10, gap: 2, fontWeight: 600}}>
+              <span style={{fontSize: 18}}>🛠️</span>
+              Admin
+            </Link>
+          )}
           {user && (
             <button onClick={deconnexion} style={{background: 'none', border: 'none', cursor: 'pointer', fontSize: 10, color: '#999'}}>Déconnexion</button>
           )}

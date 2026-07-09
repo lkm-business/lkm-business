@@ -8,7 +8,8 @@ export function CartProvider({ children }) {
 
   const ajouter = (produit, formule = null, quantite = 1) => {
     const key = formule ? `${produit.id}-${formule.id}` : `${produit.id}`;
-    const prixUnitaire = formule ? formule.prix : produit.prix;
+    const enPromo = !formule && produit.prix_promo && Number(produit.prix_promo) < Number(produit.prix);
+    const prixUnitaire = formule ? formule.prix : (enPromo ? Number(produit.prix_promo) : produit.prix);
     setItems(prev => {
       const existant = prev.find(i => i.key === key);
       if (existant) {

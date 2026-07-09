@@ -13,11 +13,19 @@ import OrderSuccess from './pages/OrderSuccess';
 import Contact from './pages/Contact';
 import Produits from './pages/Produits';
 import Abonnements from './pages/Abonnements';
+import Admin from './pages/Admin';
 
 function ProtectedRoute({ children }) {
   const { user, ready } = useAuth();
   if (!ready) return null;
   return user ? children : <Navigate to="/connexion" replace />;
+}
+
+function AdminRoute({ children }) {
+  const { user, ready } = useAuth();
+  if (!ready) return null;
+  if (!user) return <Navigate to="/connexion" replace />;
+  return user.role === 'admin' ? children : <Navigate to="/" replace />;
 }
 
 export default function App() {
@@ -37,6 +45,7 @@ export default function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/produits" element={<Produits />} />
             <Route path="/abonnements" element={<Abonnements />} />
+            <Route path="/admin" element={<AdminRoute><Admin /></AdminRoute>} />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
           <Footer />
