@@ -43,3 +43,11 @@ export const produitImg = (p) => {
 };
 
 export const flickrImg = (query, lock, w = 400, h = 300) => `https://loremflickr.com/${w}/${h}/${query}?lock=${lock}`;
+
+// Détecte si une URL vidéo est une vidéo YouTube et renvoie l'URL d'embed correspondante,
+// sinon null (on utilisera alors une balise <video> classique pour les fichiers directs, ex: Cloudinary)
+export const youtubeEmbedUrl = (url) => {
+  if (!url) return null;
+  const m = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([\w-]{6,})/);
+  return m ? `https://www.youtube.com/embed/${m[1]}` : null;
+};

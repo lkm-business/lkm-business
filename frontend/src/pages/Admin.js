@@ -14,7 +14,7 @@ export default function Admin() {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [edits, setEdits] = useState({});
-  const [nouveau, setNouveau] = useState({ nom: '', description: '', prix: '', type: 'physique', categorie_id: '', image_principale: '', stock: 0 });
+  const [nouveau, setNouveau] = useState({ nom: '', description: '', prix: '', type: 'physique', categorie_id: '', image_principale: '', stock: 0, images: '', video_url: '' });
   const [creation, setCreation] = useState(false);
 
   const charger = async () => {
@@ -31,6 +31,7 @@ export default function Admin() {
   const majEdit = (id, champ, valeur) => setEdits(e => ({ ...e, [id]: { ...e[id], [champ]: valeur } }));
 
   const valeur = (p, champ) => edits[p.id]?.[champ] !== undefined ? edits[p.id][champ] : (p[champ] ?? '');
+  const valeurImages = (p) => edits[p.id]?.images !== undefined ? edits[p.id].images : (Array.isArray(p.images) ? p.images.join('\n') : '');
 
   const enregistrerLigne = async (p) => {
     const e = edits[p.id] || {};
@@ -39,6 +40,9 @@ export default function Admin() {
         prix: e.prix !== undefined ? Number(e.prix) : undefined,
         prix_promo: e.prix_promo !== undefined ? (e.prix_promo === '' ? null : Number(e.prix_promo)) : (p.prix_promo ?? null),
         stock: e.stock !== undefined ? Number(e.stock) : undefined,
+        image_principale: e.image_principale !== undefined ? e.image_principale : undefined,
+        images: e.images !== undefined ? e.images.split('\n').map(s => s.trim()).filter(Boolean) : undefined,
+        video_url: e.video_url !== undefined ? (e.video_url.trim() || null) : (p.video_url ?? null),
       });
       toast.success(p.nom + ' mis à jour');
       setEdits(prev => { const cp = { ...prev }; delete cp[p.id]; return cp; });
@@ -68,9 +72,16 @@ export default function Admin() {
     if (!nouveau.nom || !nouveau.prix) { toast.error('Nom et prix requis'); return; }
     setCreation(true);
     try {
-      await API.post('/produits', { ...nouveau, prix: Number(nouveau.prix), categorie_id: nouveau.categorie_id || null, stock: Number(nouveau.stock) || 0 });
+      await API.post('/produits', {
+        ...nouveau,
+        prix: Number(nouveau.prix),
+        categorie_id: nouveau.categorie_id || null,
+        stock: Number(nouveau.stock) || 0,
+        images: nouveau.images.split('\n').map(s => s.trim()).filter(Boolean),
+        video_url: nouveau.video_url.trim() || null,
+      });
       toast.success('Produit créé !');
-      setNouveau({ nom: '', description: '', prix: '', type: 'physique', categorie_id: '', image_principale: '', stock: 0 });
+      setNouveau({ nom: '', description: '', prix: '', type: 'physique', categorie_id: '', image_principale: '', stock: 0, images: '', video_url: '' });
       charger();
     } catch { toast.error('Erreur création'); }
     finally { setCreation(false); }
@@ -99,7 +110,9 @@ export default function Admin() {
           {categories.map(c => <option key={c.id} value={c.id}>{c.nom}</option>)}
         </select>
         <input placeholder="Stock" type="number" style={inputStyle} value={nouveau.stock} onChange={e => setNouveau(n => ({...n, stock: e.target.value}))} />
-        <input placeholder="URL image (/images/...)" style={inputStyle} value={nouveau.image_principale} onChange={e => setNouveau(n => ({...n, image_principale: e.target.value}))} />
+        <input placeholder="Photo principale (URL)" style={inputStyle} value={nouveau.image_principale} onChange={e => setNouveau(n => ({...n, image_principale: e.target.value}))} />
+        <input placeholder="Vidéo (YouTube ou lien Cloudinary)" style={inputStyle} value={nouveau.video_url} onChange={e => setNouveau(n => ({...n, video_url: e.target.value}))} />
+        <textarea placeholder={"Photos supplémentaires — une URL par ligne"} style={{...inputStyle, gridColumn: '1 / -1', minHeight: 60, resize: 'vertical', fontFamily: 'inherit'}} value={nouveau.images} onChange={e => setNouveau(n => ({...n, images: e.target.value}))} />
         <input placeholder="Description" style={{...inputStyle, gridColumn: '1 / -1'}} value={nouveau.description} onChange={e => setNouveau(n => ({...n, description: e.target.value}))} />
         <button type="submit" disabled={creation} style={{
           gridColumn: '1 / -1', padding: 10, background: '#1D9E75', color: 'white', border: 'none',
@@ -156,6 +169,21 @@ export default function Admin() {
               }}>
                 Enregistrer
               </button>
+            </div>
+
+            <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(160px,1fr))', gap: 8, marginTop: 10}}>
+              <div>
+                <label style={{fontSize: 10, color: '#888', display: 'block', marginBottom: 3}}>Photo principale (URL)</label>
+                <input style={inputStyle} value={valeur(p, 'image_principale')} onChange={e => majEdit(p.id, 'image_principale', e.target.value)} />
+              </div>
+              <div>
+                <label style={{fontSize: 10, color: '#888', display: 'block', marginBottom: 3}}>Vidéo (YouTube ou lien direct)</label>
+                <input style={inputStyle} value={valeur(p, 'video_url')} onChange={e => majEdit(p.id, 'video_url', e.target.value)} />
+              </div>
+              <div style={{gridColumn: '1 / -1'}}>
+                <label style={{fontSize: 10, color: '#888', display: 'block', marginBottom: 3}}>Photos supplémentaires — une URL par ligne</label>
+                <textarea style={{...inputStyle, width: '100%', minHeight: 50, resize: 'vertical', fontFamily: 'inherit'}} value={valeurImages(p)} onChange={e => majEdit(p.id, 'images', e.target.value)} />
+              </div>
             </div>
 
             {p.prix_promo && Number(p.prix_promo) < Number(p.prix) && (

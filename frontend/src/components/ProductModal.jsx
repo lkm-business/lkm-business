@@ -1,26 +1,64 @@
 import { useState, useEffect } from 'react';
-import { produitImg } from '../utils/images';
+import { produitImg, youtubeEmbedUrl } from '../utils/images';
 
 const fmt = n => Number(n).toLocaleString('fr-FR') + ' FCFA';
 
 export default function ProductModal({ produit, onClose, onAdd, addLabel, suffix }) {
   const [qty, setQty] = useState(1);
-  useEffect(() => { setQty(1); }, [produit?.id]);
+  const [activeIdx, setActiveIdx] = useState(0);
+  useEffect(() => { setQty(1); setActiveIdx(0); }, [produit?.id]);
   if (!produit) return null;
   const enPromo = produit.prix_promo && Number(produit.prix_promo) < Number(produit.prix);
+
+  const photos = [produit.image_principale, ...(Array.isArray(produit.images) ? produit.images : [])]
+    .filter(Boolean);
+  const uniquePhotos = [...new Set(photos)];
+  const galleryImages = uniquePhotos.length ? uniquePhotos : [produitImg(produit)];
+  const items = [
+    ...galleryImages.map(src => ({ type: 'image', src })),
+    ...(produit.video_url ? [{ type: 'video', src: produit.video_url }] : []),
+  ];
+  const active = items[activeIdx] || items[0];
+  const embedUrl = active?.type === 'video' ? youtubeEmbedUrl(active.src) : null;
+
   return (
     <div onClick={onClose} style={{position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.75)', zIndex: 300, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20}}>
       <div onClick={e => e.stopPropagation()} style={{background: '#111', borderRadius: 16, maxWidth: 420, width: '100%', maxHeight: '85vh', overflowY: 'auto', padding: 22, position: 'relative', border: '1px solid #262626'}}>
-        <button onClick={onClose} style={{position: 'absolute', top: 12, right: 12, background: 'rgba(255,255,255,0.1)', border: 'none', color: 'white', width: 28, height: 28, borderRadius: '50%', fontSize: 15, cursor: 'pointer'}}>✕</button>
+        <button onClick={onClose} style={{position: 'absolute', top: 12, right: 12, background: 'rgba(255,255,255,0.1)', border: 'none', color: 'white', width: 28, height: 28, borderRadius: '50%', fontSize: 15, cursor: 'pointer', zIndex: 2}}>✕</button>
 
-        <div style={{aspectRatio: '1 / 1', maxWidth: 220, margin: '0 auto 18px', borderRadius: 12, overflow: 'hidden', background: '#1a1a1a'}}>
-          <img
-            src={produitImg(produit)}
-            alt={produit.nom}
-            style={{width: '100%', height: '100%', objectFit: 'cover'}}
-            onError={e => { e.target.onerror = null; e.target.style.display = 'none'; }}
-          />
+        <div style={{aspectRatio: '1 / 1', maxWidth: 220, margin: '0 auto 10px', borderRadius: 12, overflow: 'hidden', background: '#1a1a1a'}}>
+          {active?.type === 'video' ? (
+            embedUrl ? (
+              <iframe src={embedUrl} title="Vidéo produit" allow="autoplay; encrypted-media" allowFullScreen style={{width: '100%', height: '100%', border: 'none'}} />
+            ) : (
+              <video src={active.src} controls style={{width: '100%', height: '100%', objectFit: 'cover'}} />
+            )
+          ) : (
+            <img
+              src={active?.src || produitImg(produit)}
+              alt={produit.nom}
+              style={{width: '100%', height: '100%', objectFit: 'cover'}}
+              onError={e => { e.target.onerror = null; e.target.style.display = 'none'; }}
+            />
+          )}
         </div>
+
+        {items.length > 1 && (
+          <div style={{display: 'flex', gap: 6, overflowX: 'auto', paddingBottom: 12, justifyContent: 'center'}}>
+            {items.map((it, i) => (
+              <button key={i} onClick={() => setActiveIdx(i)} style={{
+                flex: '0 0 auto', width: 44, height: 44, borderRadius: 8, overflow: 'hidden', position: 'relative',
+                border: i === activeIdx ? '2px solid #1D9E75' : '1px solid #333', padding: 0, cursor: 'pointer', background: '#1a1a1a'
+              }}>
+                {it.type === 'video' ? (
+                  <div style={{width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16}}>▶️</div>
+                ) : (
+                  <img src={it.src} alt="" style={{width: '100%', height: '100%', objectFit: 'cover'}} onError={e => { e.target.style.display = 'none'; }} />
+                )}
+              </button>
+            ))}
+          </div>
+        )}
 
         <span style={{display: 'inline-block', padding: '3px 8px', borderRadius: 5, fontSize: 10, fontWeight: 600, background: '#E1F5EE', color: '#0F6E56', marginBottom: 8, textTransform: 'uppercase', letterSpacing: 0.3}}>
           {produit.categorie_nom}

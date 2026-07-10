@@ -51,6 +51,7 @@ CREATE TABLE produits (
   categorie_id INTEGER REFERENCES categories(id),
   image_principale VARCHAR(500),
   images JSONB DEFAULT '[]',
+  video_url TEXT,
   est_actif BOOLEAN DEFAULT TRUE,
   cree_le TIMESTAMP DEFAULT NOW()
 );
