@@ -28,55 +28,80 @@ router.post('/stripe', auth, async (req, res) => {
   }
 });
 
-// POST /api/paiements/cinetpay - Orange Money / Wave
+// Authentification CinetPay (API v1) — jeton mis en cache jusqu'à expiration
+let cinetpayToken = null;
+let cinetpayTokenExpiry = 0;
+
+async function getCinetpayToken() {
+  if (cinetpayToken && Date.now() < cinetpayTokenExpiry) return cinetpayToken;
+  const r = await fetch(`${process.env.CINETPAY_BASE_URL}/v1/oauth/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      api_key: process.env.CINETPAY_API_KEY,
+      api_password: process.env.CINETPAY_API_PASSWORD,
+    }),
+  });
+  const data = await r.json();
+  if (data.code !== 200 || !data.access_token)
+    throw new Error('Authentification CinetPay échouée');
+  cinetpayToken = data.access_token;
+  cinetpayTokenExpiry = Date.now() + (data.expires_in - 60) * 1000;
+  return cinetpayToken;
+}
+
+const splitNom = (nom) => {
+  const parts = (nom || 'Client LKM').trim().split(/\s+/);
+  let prenom = parts[0] || 'Client';
+  let nomFamille = parts.slice(1).join(' ') || parts[0] || 'LKM';
+  if (prenom.length < 2) prenom = (prenom + 'XX').slice(0, 2);
+  if (nomFamille.length < 2) nomFamille = (nomFamille + 'XX').slice(0, 2);
+  return { prenom, nomFamille };
+};
+
+// POST /api/paiements/cinetpay - Wave / Orange Money / Carte, en une seule page de paiement
 router.post('/cinetpay', auth, async (req, res) => {
   const { montant, commande_id, description } = req.body;
   try {
-    const response = await fetch('https://api-checkout.cinetpay.com/v2/payment', {
+    const db = req.app.locals.db;
+    const u = await db.query('SELECT nom FROM utilisateurs WHERE id=$1', [req.user.id]);
+    const { prenom, nomFamille } = splitNom(u.rows[0]?.nom);
+
+    const token = await getCinetpayToken();
+    const merchantTransactionId = Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+
+    const response = await fetch(`${process.env.CINETPAY_BASE_URL}/v1/payment`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify({
-        apikey: process.env.CINETPAY_API_KEY,
-        site_id: process.env.CINETPAY_SITE_ID,
-        transaction_id: commande_id,
-        amount: montant,
         currency: 'XOF',
-        description: description || 'Paiement LKM_BUSINESS',
-        notify_url: `${process.env.FRONTEND_URL}/api/paiements/cinetpay/webhook`,
-        return_url: `${process.env.FRONTEND_URL}/commande/succes`,
-        cancel_url: `${process.env.FRONTEND_URL}/panier`,
-        channels: 'ALL', // Orange Money + Wave + Mobile Money
+        merchant_transaction_id: merchantTransactionId,
+        amount: Math.round(montant),
         lang: 'fr',
-        customer_id: req.user.id,
-        customer_email: req.user.email,
-      })
+        designation: description || `Commande LKM_BUSINESS #${commande_id}`,
+        client_email: req.user.email,
+        client_first_name: prenom,
+        client_last_name: nomFamille,
+        success_url: `${process.env.FRONTEND_URL}/commande/succes`,
+        failed_url: `${process.env.FRONTEND_URL}/checkout`,
+        notify_url: `${process.env.BACKEND_URL}/api/paiements/cinetpay/webhook`,
+      }),
     });
     const data = await response.json();
-    if (data.code === '201') {
-      res.json({ url: data.data.payment_url });
+    if (data.code === 200 && data.payment_url) {
+      res.json({ url: data.payment_url });
     } else {
       res.status(400).json({ message: 'Erreur CinetPay', details: data });
     }
   } catch (err) {
-    res.status(500).json({ message: 'Erreur paiement mobile', error: err.message });
+    res.status(500).json({ message: 'Erreur paiement', error: err.message });
   }
 });
 
 // POST /api/paiements/cinetpay/webhook - notification CinetPay
 router.post('/cinetpay/webhook', async (req, res) => {
-  const { cpm_trans_id, cpm_result, cpm_amount } = req.body;
-  try {
-    const db = req.app.locals.db;
-    if (cpm_result === '00') {
-      await db.query(
-        `UPDATE commandes SET statut='payee', statut_paiement='paye', reference_paiement=$1 WHERE numero=$2`,
-        [cpm_trans_id, cpm_trans_id]
-      );
-    }
-    res.status(200).send('OK');
-  } catch (err) {
-    res.status(500).send('Erreur');
-  }
+  console.log('🔔 Notification CinetPay reçue:', JSON.stringify(req.body));
+  res.status(200).send('OK');
 });
 
 // POST /api/paiements/stripe/webhook
