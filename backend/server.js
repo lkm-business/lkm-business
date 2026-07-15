@@ -45,6 +45,17 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'LKM_BUSINESS API opérationnelle' });
 });
 
+// Diagnostic temporaire : IP de sortie du serveur (pour la liste blanche CinetPay)
+app.get('/api/health/ip-sortante', async (req, res) => {
+  try {
+    const r = await fetch('https://api.ipify.org?format=json');
+    const data = await r.json();
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // ============================================
 // CRON: Notifications expiration (tous les jours à 8h)
 // ============================================
