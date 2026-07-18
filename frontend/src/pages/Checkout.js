@@ -1,20 +1,29 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { useAuth } from '../context/AuthContext';
 import API from '../utils/api';
 import toast from 'react-hot-toast';
 
 export default function Checkout() {
   const { items, total, vider } = useCart();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const [methode, setMethode] = useState('');
   const [adresse, setAdresse] = useState('');
   const [loading, setLoading] = useState(false);
+  const [invite, setInvite] = useState({ nom: '', telephone: '', email: '' });
 
   const fmt = n => Number(n).toLocaleString('fr-FR') + ' FCFA';
 
   const passer = async () => {
     if (!methode) return toast.error('Choisir une méthode de paiement');
+    if (!user) {
+      if (!invite.nom.trim() || !invite.telephone.trim())
+        return toast.error('Nom et téléphone requis pour commander');
+      if (methode === 'cinetpay' && !invite.email.trim())
+        return toast.error('Email requis pour le paiement en ligne');
+    }
     setLoading(true);
     try {
       const articles = items.map(i => ({
@@ -30,7 +39,8 @@ export default function Checkout() {
       const { data } = await API.post('/commandes', {
         articles,
         methode_paiement: methode,
-        adresse_livraison: { adresse }
+        adresse_livraison: { adresse },
+        ...(!user && { client: invite }),
       });
 
       if (methode === 'cinetpay') {
@@ -38,13 +48,14 @@ export default function Checkout() {
           montant: total,
           commande_id: data.commande.id,
           description: `Commande LKM_BUSINESS #${data.commande.numero}`,
+          ...(!user && { client: invite }),
         });
         vider();
         window.location.href = pay.data.url;
       } else {
         toast.success('Commande enregistrée ! Nous vous contacterons pour le paiement.');
         vider();
-        navigate('/compte');
+        navigate('/commande/succes');
       }
     } catch (err) {
       toast.error(err.response?.data?.message || 'Erreur lors de la commande');
@@ -84,6 +95,19 @@ export default function Checkout() {
           <span>Total</span><span style={{color:'#0F6E56'}}>{fmt(total)}</span>
         </div>
       </div>
+
+      {!user && (
+        <div style={{background:'white',border:'0.5px solid #e5e5e5',borderRadius:12,padding:16,marginBottom:16}}>
+          <div style={{fontSize:13,fontWeight:500,marginBottom:4}}>Vos informations</div>
+          <div style={{fontSize:11,color:'#888',marginBottom:10}}>Pas besoin de compte — remplis juste ces infos pour qu'on te contacte.</div>
+          <input value={invite.nom} onChange={e=>setInvite(v=>({...v, nom: e.target.value}))} placeholder="Nom complet *"
+            style={{width:'100%',padding:'8px 12px',border:'0.5px solid #ddd',borderRadius:8,fontSize:13,boxSizing:'border-box',outline:'none',marginBottom:8}} />
+          <input value={invite.telephone} onChange={e=>setInvite(v=>({...v, telephone: e.target.value}))} placeholder="Téléphone (WhatsApp de préférence) *"
+            style={{width:'100%',padding:'8px 12px',border:'0.5px solid #ddd',borderRadius:8,fontSize:13,boxSizing:'border-box',outline:'none',marginBottom:8}} />
+          <input value={invite.email} onChange={e=>setInvite(v=>({...v, email: e.target.value}))} placeholder={methode === 'cinetpay' ? 'Email * (requis pour le paiement en ligne)' : 'Email (optionnel)'}
+            style={{width:'100%',padding:'8px 12px',border:'0.5px solid #ddd',borderRadius:8,fontSize:13,boxSizing:'border-box',outline:'none'}} />
+        </div>
+      )}
 
       {items.some(i => i.type === 'physique') && (
         <div style={{background:'white',border:'0.5px solid #e5e5e5',borderRadius:12,padding:16,marginBottom:16}}>

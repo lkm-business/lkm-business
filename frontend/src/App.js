@@ -40,8 +40,8 @@ export default function App() {
             <Route path="/" element={<Boutique />} />
             <Route path="/connexion" element={<Connexion />} />
             <Route path="/compte" element={<ProtectedRoute><Compte /></ProtectedRoute>} />
-            <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
-            <Route path="/commande/succes" element={<ProtectedRoute><OrderSuccess /></ProtectedRoute>} />
+            <Route path="/checkout" element={<Checkout />} />
+            <Route path="/commande/succes" element={<OrderSuccess />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/produits" element={<Produits />} />
             <Route path="/abonnements" element={<Abonnements />} />

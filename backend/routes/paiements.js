@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const auth = require('../middleware/auth');
+const authOptionnelle = require('../middleware/authOptionnelle');
 
 // POST /api/paiements/stripe - paiement carte bancaire
 router.post('/stripe', auth, async (req, res) => {
@@ -60,12 +61,20 @@ const splitNom = (nom) => {
 };
 
 // POST /api/paiements/cinetpay - Wave / Orange Money / Carte, en une seule page de paiement
-router.post('/cinetpay', auth, async (req, res) => {
-  const { montant, commande_id, description } = req.body;
+router.post('/cinetpay', authOptionnelle, async (req, res) => {
+  const { montant, commande_id, description, client } = req.body;
   try {
-    const db = req.app.locals.db;
-    const u = await db.query('SELECT nom FROM utilisateurs WHERE id=$1', [req.user.id]);
-    const { prenom, nomFamille } = splitNom(u.rows[0]?.nom);
+    let prenom, nomFamille, email;
+    if (req.user) {
+      const db = req.app.locals.db;
+      const u = await db.query('SELECT nom FROM utilisateurs WHERE id=$1', [req.user.id]);
+      ({ prenom, nomFamille } = splitNom(u.rows[0]?.nom));
+      email = req.user.email;
+    } else {
+      if (!client?.email) return res.status(400).json({ message: 'Email requis pour le paiement en ligne' });
+      ({ prenom, nomFamille } = splitNom(client.nom));
+      email = client.email;
+    }
 
     const token = await getCinetpayToken();
     const merchantTransactionId = Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
@@ -79,7 +88,7 @@ router.post('/cinetpay', auth, async (req, res) => {
         amount: Math.round(montant),
         lang: 'fr',
         designation: description || `Commande LKM_BUSINESS #${commande_id}`,
-        client_email: req.user.email,
+        client_email: email,
         client_first_name: prenom,
         client_last_name: nomFamille,
         success_url: `${process.env.FRONTEND_URL}/commande/succes`,

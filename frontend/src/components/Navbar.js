@@ -10,10 +10,7 @@ export default function Navbar() {
   const [promoOpen, setPromoOpen] = useState(true);
   const [search, setSearch] = useState('');
 
-  const handleCart = () => {
-    if (!user) { navigate('/connexion?redirect=panier'); return; }
-    setOpen(true);
-  };
+  const handleCart = () => setOpen(true);
 
   const handleSearch = (e) => {
     e.preventDefault();

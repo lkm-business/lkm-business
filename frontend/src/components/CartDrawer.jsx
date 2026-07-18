@@ -52,7 +52,7 @@ export default function CartDrawer() {
               Commander →
             </button>
             <div style={{display:'flex',gap:'4px',marginTop:'8px',flexWrap:'wrap'}}>
-              {['Orange Money','Wave','Stripe','PayPal'].map(p => (
+              {['Wave','Orange Money','Carte bancaire'].map(p => (
                 <span key={p} style={{padding:'2px 6px',border:'1px solid #e5e7eb',borderRadius:'4px',fontSize:'10px',color:'#9ca3af'}}>{p}</span>
               ))}
             </div>
