@@ -1,0 +1,25 @@
+const COLOR_MAP = {
+  'noir': '#111111',
+  'blanc': '#f5f5f5',
+  'gris': '#9CA3AF',
+  'grise': '#9CA3AF',
+  'rose': '#F472B6',
+  'rouge': '#DC2626',
+  'bleu': '#2563EB',
+  'bleu foncé': '#1E3A8A',
+  'bleu fonce': '#1E3A8A',
+  'vert': '#16A34A',
+  'jaune': '#FACC15',
+  'orange': '#F97316',
+  'violet': '#7C3AED',
+  'argenté': '#C0C0C0',
+  'argente': '#C0C0C0',
+  'doré': '#D4AF37',
+  'dore': '#D4AF37',
+  'or': '#D4AF37',
+  'marron': '#78350F',
+  'beige': '#E5D3B3',
+  'turquoise': '#06B6D4',
+};
+
+export const colorHex = (nom) => COLOR_MAP[(nom || '').trim().toLowerCase()] || '#888888';

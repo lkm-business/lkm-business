@@ -1,13 +1,19 @@
 import { useState, useEffect } from 'react';
 import { produitImg, youtubeEmbedUrl } from '../utils/images';
+import { colorHex } from '../utils/colors';
 
 const fmt = n => Number(n).toLocaleString('fr-FR') + ' FCFA';
 
 export default function ProductModal({ produit, onClose, onAdd, addLabel, suffix }) {
   const [qty, setQty] = useState(1);
   const [activeIdx, setActiveIdx] = useState(0);
-  useEffect(() => { setQty(1); setActiveIdx(0); }, [produit?.id]);
+  const [couleur, setCouleur] = useState(null);
+  useEffect(() => {
+    setQty(1); setActiveIdx(0);
+    setCouleur(Array.isArray(produit?.couleurs) ? produit.couleurs[0] || null : null);
+  }, [produit?.id]);
   if (!produit) return null;
+  const couleurs = Array.isArray(produit.couleurs) ? produit.couleurs : [];
   const enPromo = produit.prix_promo && Number(produit.prix_promo) < Number(produit.prix);
 
   const photos = [produit.image_principale, ...(Array.isArray(produit.images) ? produit.images : [])]
@@ -75,6 +81,20 @@ export default function ProductModal({ produit, onClose, onAdd, addLabel, suffix
           {produit.description || "Aucune description disponible pour ce produit."}
         </p>
 
+        {couleurs.length > 0 && (
+          <div style={{display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14}}>
+            <span style={{fontSize: 13, color: '#ccc', fontWeight: 600}}>Couleur : {couleur}</span>
+            <div style={{display: 'flex', gap: 6}}>
+              {couleurs.map(c => (
+                <button key={c} onClick={() => setCouleur(c)} title={c} style={{
+                  width: 22, height: 22, borderRadius: '50%', background: colorHex(c), padding: 0, cursor: 'pointer',
+                  border: couleur === c ? '2px solid #2DD4A7' : '1px solid #444',
+                }} />
+              ))}
+            </div>
+          </div>
+        )}
+
         <div style={{display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14}}>
           <span style={{fontSize: 13, color: '#ccc', fontWeight: 600}}>Quantité :</span>
           <button onClick={() => setQty(q => Math.max(1, q - 1))} style={{
@@ -88,7 +108,7 @@ export default function ProductModal({ produit, onClose, onAdd, addLabel, suffix
           }}>+</button>
         </div>
 
-        <button onClick={() => { onAdd(qty); onClose(); }} style={{
+        <button onClick={() => { onAdd(qty, couleur); onClose(); }} style={{
           width: '100%', padding: 12, background: '#1D9E75', color: 'white', border: 'none',
           borderRadius: 8, fontSize: 14, fontWeight: 700, cursor: 'pointer'
         }}>

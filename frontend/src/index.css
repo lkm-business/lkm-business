@@ -3,7 +3,7 @@
 html { overflow-x: hidden; }
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  color: #1a1a1a;
+  color: #e5e5e5;
   background-image: linear-gradient(rgba(0, 0, 0, 0.82), rgba(0, 0, 0, 0.82)), url('https://loremflickr.com/1600/900/jbl,headphones?lock=720');
   background-size: cover;
   background-position: center;
@@ -39,12 +39,12 @@ img { max-width: 100%; }
 /* Menu catégories — dropdown au survol */
 .nav-dropdown { position: relative; }
 .nav-dropdown-menu {
-  display: none; position: absolute; top: 100%; left: 0; background: white;
-  border: 1px solid #e5e5e5; border-radius: 8px; box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+  display: none; position: absolute; top: 100%; left: 0; background: #1a1a1a;
+  border: 1px solid #333; border-radius: 8px; box-shadow: 0 8px 20px rgba(0,0,0,0.5);
   min-width: 220px; z-index: 60; padding: 6px;
 }
 .nav-dropdown:hover .nav-dropdown-menu { display: block; }
-.nav-dropdown-menu a:hover { background: #f5f5f5; }
+.nav-dropdown-menu a:hover { background: #262626; }
 
 /* Hero carrousel — animations d'entrée */
 @keyframes heroTextIn {

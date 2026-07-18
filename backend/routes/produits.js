@@ -23,16 +23,16 @@ router.get('/admin/tous', auth, estAdmin, async (req, res) => {
 
 // POST /api/produits - créer un produit (admin)
 router.post('/', auth, estAdmin, async (req, res) => {
-  const { nom, description, prix, type, categorie_id, image_principale, stock, images, video_url } = req.body;
+  const { nom, description, prix, type, categorie_id, image_principale, stock, images, video_url, couleurs } = req.body;
   if (!nom || !prix || !type)
     return res.status(400).json({ message: 'Champs manquants' });
   try {
     const db = req.app.locals.db;
     const slug = slugify(nom);
     const r = await db.query(
-      `INSERT INTO produits (nom, slug, description, prix, type, categorie_id, image_principale, stock, images, video_url)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) RETURNING *`,
-      [nom, slug, description || null, prix, type, categorie_id || null, image_principale || null, stock || 0, JSON.stringify(images || []), video_url || null]
+      `INSERT INTO produits (nom, slug, description, prix, type, categorie_id, image_principale, stock, images, video_url, couleurs)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) RETURNING *`,
+      [nom, slug, description || null, prix, type, categorie_id || null, image_principale || null, stock || 0, JSON.stringify(images || []), video_url || null, JSON.stringify(couleurs || [])]
     );
     res.status(201).json(r.rows[0]);
   } catch (err) {
@@ -42,7 +42,7 @@ router.post('/', auth, estAdmin, async (req, res) => {
 
 // PUT /api/produits/:id - modifier un produit (admin)
 router.put('/:id', auth, estAdmin, async (req, res) => {
-  const { nom, description, prix, prix_promo, type, categorie_id, image_principale, stock, est_actif, images, video_url } = req.body;
+  const { nom, description, prix, prix_promo, type, categorie_id, image_principale, stock, est_actif, images, video_url, couleurs } = req.body;
   try {
     const db = req.app.locals.db;
     const r = await db.query(
@@ -57,9 +57,10 @@ router.put('/:id', auth, estAdmin, async (req, res) => {
         stock = COALESCE($8, stock),
         est_actif = COALESCE($9, est_actif),
         images = COALESCE($10, images),
-        video_url = $11
-       WHERE id = $12 RETURNING *`,
-      [nom, description, prix, prix_promo ?? null, type, categorie_id, image_principale, stock, est_actif, images ? JSON.stringify(images) : null, video_url ?? null, req.params.id]
+        video_url = $11,
+        couleurs = COALESCE($12, couleurs)
+       WHERE id = $13 RETURNING *`,
+      [nom, description, prix, prix_promo ?? null, type, categorie_id, image_principale, stock, est_actif, images ? JSON.stringify(images) : null, video_url ?? null, couleurs ? JSON.stringify(couleurs) : null, req.params.id]
     );
     if (!r.rows.length) return res.status(404).json({ message: 'Produit introuvable' });
     res.json(r.rows[0]);

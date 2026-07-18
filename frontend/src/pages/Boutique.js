@@ -43,8 +43,8 @@ export default function Boutique() {
     API.get('/produits').then(r => setProduits(r.data)).catch(() => toast.error('Erreur chargement produits'));
   }, []);
 
-  const ajouterProduit = (p, formule=null, quantite=1) => {
-    ajouter(p, formule, quantite);
+  const ajouterProduit = (p, formule=null, quantite=1, couleur=null) => {
+    ajouter(p, formule, quantite, couleur);
     toast.success((formule ? p.nom + ' — ' + formule.duree_label : p.nom) + ' ajouté !');
   };
 
@@ -106,7 +106,7 @@ export default function Boutique() {
                   badge="Top ventes"
                   width={170}
                   suffix={p.categorie_slug === 'streaming' ? '/mois' : null}
-                  onAdd={(qty) => p.categorie_slug === 'iptv' ? toast('Choisis une formule ci-dessous 👇') : ajouterProduit(p, null, qty)}
+                  onAdd={(qty, couleur) => p.categorie_slug === 'iptv' ? toast('Choisis une formule ci-dessous 👇') : ajouterProduit(p, null, qty, couleur)}
                   onInfo={() => setDetailProduit(p)}
                 />
               ))}
@@ -150,7 +150,7 @@ export default function Boutique() {
                         produit={p}
                         badge={bestSellerSlugs.has(p.slug) ? 'Top ventes' : null}
                         suffix={slug === 'streaming' ? '/mois' : null}
-                        onAdd={(qty) => ajouterProduit(p, null, qty)}
+                        onAdd={(qty, couleur) => ajouterProduit(p, null, qty, couleur)}
                         onInfo={() => setDetailProduit(p)}
                         addLabel={slug === 'streaming' ? "+ S'abonner" : '+ Ajouter'}
                       />
@@ -169,7 +169,7 @@ export default function Boutique() {
         onClose={() => setDetailProduit(null)}
         suffix={detailProduit?.categorie_slug === 'streaming' ? '/mois' : null}
         addLabel={detailProduit?.categorie_slug === 'streaming' ? "+ S'abonner" : '+ Ajouter au panier'}
-        onAdd={(qty) => detailProduit && ajouterProduit(detailProduit, null, qty)}
+        onAdd={(qty, couleur) => detailProduit && ajouterProduit(detailProduit, null, qty, couleur)}
       />
     </div>
   );

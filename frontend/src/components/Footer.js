@@ -19,6 +19,7 @@ export default function Footer() {
             <Link to="/" style={linkStyle}>Tous les produits</Link>
             <Link to="/produits" style={linkStyle}>Produits physiques</Link>
             <Link to="/abonnements" style={linkStyle}>Abonnements & IPTV</Link>
+            <Link to="/about" style={linkStyle}>À propos</Link>
           </div>
         </div>
         <div>

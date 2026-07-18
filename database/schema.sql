@@ -52,6 +52,7 @@ CREATE TABLE produits (
   image_principale VARCHAR(500),
   images JSONB DEFAULT '[]',
   video_url TEXT,
+  couleurs JSONB DEFAULT '[]',
   est_actif BOOLEAN DEFAULT TRUE,
   cree_le TIMESTAMP DEFAULT NOW()
 );

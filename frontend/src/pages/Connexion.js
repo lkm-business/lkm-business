@@ -30,14 +30,14 @@ export default function Connexion() {
     }
   };
 
-  const L = {display:'block',fontSize:12,color:'#666',marginBottom:4};
-  const I = {width:'100%',padding:'8px 12px',border:'0.5px solid #ddd',borderRadius:8,fontSize:13,marginBottom:12,boxSizing:'border-box',outline:'none'};
+  const L = {display:'block',fontSize:12,color:'#999',marginBottom:4};
+  const I = {width:'100%',padding:'8px 12px',border:'1px solid #333',borderRadius:8,fontSize:13,marginBottom:12,boxSizing:'border-box',outline:'none',background:'#1a1a1a',color:'white'};
   const B = {width:'100%',padding:10,background:'#1D9E75',color:'white',border:'none',borderRadius:8,fontSize:13,fontWeight:500,cursor:'pointer',marginTop:4};
 
   return (
     <div style={{maxWidth:380,margin:'48px auto',padding:'0 20px'}}>
-      <div style={{background:'white',border:'0.5px solid #e5e5e5',borderRadius:12,padding:28}}>
-        <h2 style={{fontSize:18,fontWeight:500,marginBottom:4}}>
+      <div style={{background:'#111',border:'1px solid #262626',borderRadius:12,padding:28}}>
+        <h2 style={{fontSize:18,fontWeight:500,marginBottom:4,color:'white'}}>
           {mode==='connexion'?'Connexion':'Créer un compte'}
         </h2>
         <p style={{fontSize:13,color:'#888',marginBottom:20}}>
@@ -60,7 +60,7 @@ export default function Connexion() {
         </form>
         <p style={{textAlign:'center',marginTop:14,fontSize:13,color:'#888'}}>
           {mode==='connexion'?'Pas de compte ? ':'Déjà un compte ? '}
-          <span style={{color:'#0F6E56',cursor:'pointer',textDecoration:'underline'}}
+          <span style={{color:'#2DD4A7',cursor:'pointer',textDecoration:'underline'}}
             onClick={()=>setMode(mode==='connexion'?'inscription':'connexion')}>
             {mode==='connexion'?'Créer un compte':'Se connecter'}
           </span>

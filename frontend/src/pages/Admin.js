@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import API from '../utils/api';
+import { colorHex } from '../utils/colors';
 import toast from 'react-hot-toast';
 
 const fmt = n => Number(n).toLocaleString('fr-FR') + ' FCFA';
@@ -14,7 +15,7 @@ export default function Admin() {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [edits, setEdits] = useState({});
-  const [nouveau, setNouveau] = useState({ nom: '', description: '', prix: '', type: 'physique', categorie_id: '', image_principale: '', stock: 0, images: '', video_url: '' });
+  const [nouveau, setNouveau] = useState({ nom: '', description: '', prix: '', type: 'physique', categorie_id: '', image_principale: '', stock: 0, images: '', video_url: '', couleurs: '' });
   const [creation, setCreation] = useState(false);
 
   const charger = async () => {
@@ -32,6 +33,7 @@ export default function Admin() {
 
   const valeur = (p, champ) => edits[p.id]?.[champ] !== undefined ? edits[p.id][champ] : (p[champ] ?? '');
   const valeurImages = (p) => edits[p.id]?.images !== undefined ? edits[p.id].images : (Array.isArray(p.images) ? p.images.join('\n') : '');
+  const valeurCouleurs = (p) => edits[p.id]?.couleurs !== undefined ? edits[p.id].couleurs : (Array.isArray(p.couleurs) ? p.couleurs.join(', ') : '');
 
   const enregistrerLigne = async (p) => {
     const e = edits[p.id] || {};
@@ -43,6 +45,7 @@ export default function Admin() {
         image_principale: e.image_principale !== undefined ? e.image_principale : undefined,
         images: e.images !== undefined ? e.images.split('\n').map(s => s.trim()).filter(Boolean) : undefined,
         video_url: e.video_url !== undefined ? (e.video_url.trim() || null) : (p.video_url ?? null),
+        couleurs: e.couleurs !== undefined ? e.couleurs.split(',').map(s => s.trim()).filter(Boolean) : undefined,
       });
       toast.success(p.nom + ' mis à jour');
       setEdits(prev => { const cp = { ...prev }; delete cp[p.id]; return cp; });
@@ -79,9 +82,10 @@ export default function Admin() {
         stock: Number(nouveau.stock) || 0,
         images: nouveau.images.split('\n').map(s => s.trim()).filter(Boolean),
         video_url: nouveau.video_url.trim() || null,
+        couleurs: nouveau.couleurs.split(',').map(s => s.trim()).filter(Boolean),
       });
       toast.success('Produit créé !');
-      setNouveau({ nom: '', description: '', prix: '', type: 'physique', categorie_id: '', image_principale: '', stock: 0, images: '', video_url: '' });
+      setNouveau({ nom: '', description: '', prix: '', type: 'physique', categorie_id: '', image_principale: '', stock: 0, images: '', video_url: '', couleurs: '' });
       charger();
     } catch { toast.error('Erreur création'); }
     finally { setCreation(false); }
@@ -113,6 +117,18 @@ export default function Admin() {
         <input placeholder="Photo principale (URL)" style={inputStyle} value={nouveau.image_principale} onChange={e => setNouveau(n => ({...n, image_principale: e.target.value}))} />
         <input placeholder="Vidéo (YouTube ou lien Cloudinary)" style={inputStyle} value={nouveau.video_url} onChange={e => setNouveau(n => ({...n, video_url: e.target.value}))} />
         <textarea placeholder={"Photos supplémentaires — une URL par ligne"} style={{...inputStyle, gridColumn: '1 / -1', minHeight: 60, resize: 'vertical', fontFamily: 'inherit'}} value={nouveau.images} onChange={e => setNouveau(n => ({...n, images: e.target.value}))} />
+        {nouveau.type === 'physique' && (
+          <div style={{gridColumn: '1 / -1'}}>
+            <input placeholder="Couleurs disponibles — séparées par des virgules (ex: Noir, Rose, Gris)" style={{...inputStyle, width: '100%'}} value={nouveau.couleurs} onChange={e => setNouveau(n => ({...n, couleurs: e.target.value}))} />
+            {nouveau.couleurs.trim() && (
+              <div style={{display: 'flex', gap: 6, marginTop: 6}}>
+                {nouveau.couleurs.split(',').map(s => s.trim()).filter(Boolean).map((c, i) => (
+                  <span key={i} title={c} style={{width: 18, height: 18, borderRadius: '50%', background: colorHex(c), border: '1px solid #444'}} />
+                ))}
+              </div>
+            )}
+          </div>
+        )}
         <input placeholder="Description" style={{...inputStyle, gridColumn: '1 / -1'}} value={nouveau.description} onChange={e => setNouveau(n => ({...n, description: e.target.value}))} />
         <button type="submit" disabled={creation} style={{
           gridColumn: '1 / -1', padding: 10, background: '#1D9E75', color: 'white', border: 'none',
@@ -184,6 +200,19 @@ export default function Admin() {
                 <label style={{fontSize: 10, color: '#888', display: 'block', marginBottom: 3}}>Photos supplémentaires — une URL par ligne</label>
                 <textarea style={{...inputStyle, width: '100%', minHeight: 50, resize: 'vertical', fontFamily: 'inherit'}} value={valeurImages(p)} onChange={e => majEdit(p.id, 'images', e.target.value)} />
               </div>
+              {p.type === 'physique' && (
+                <div style={{gridColumn: '1 / -1'}}>
+                  <label style={{fontSize: 10, color: '#888', display: 'block', marginBottom: 3}}>Couleurs disponibles — séparées par des virgules</label>
+                  <input style={{...inputStyle, width: '100%'}} value={valeurCouleurs(p)} onChange={e => majEdit(p.id, 'couleurs', e.target.value)} />
+                  {valeurCouleurs(p).trim() && (
+                    <div style={{display: 'flex', gap: 6, marginTop: 6}}>
+                      {valeurCouleurs(p).split(',').map(s => s.trim()).filter(Boolean).map((c, i) => (
+                        <span key={i} title={c} style={{width: 18, height: 18, borderRadius: '50%', background: colorHex(c), border: '1px solid #444'}} />
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
 
             {p.prix_promo && Number(p.prix_promo) < Number(p.prix) && (

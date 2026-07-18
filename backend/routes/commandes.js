@@ -4,6 +4,22 @@ const authOptionnelle = require('../middleware/authOptionnelle');
 const { notifierWhatsApp } = require('../services/whatsapp');
 const { notifierEmail } = require('../services/email');
 
+const APPAREIL_LABEL = { tv: 'TV', ordinateur: 'Ordinateur', tablette: 'Tablette', telephone: 'Téléphone' };
+
+const formatIptv = (iptv) => {
+  if (!iptv?.appareil) return '';
+  const lignes = [`📡 Config IPTV — Appareil: ${APPAREIL_LABEL[iptv.appareil] || iptv.appareil}`];
+  if (iptv.appareil === 'tv') {
+    lignes.push(`  Marque: ${iptv.marque} — Système: ${iptv.systeme}`);
+    lignes.push(`  Déjà utilisé l'IPTV: ${iptv.dejaUtilise}`);
+    if (iptv.dejaUtilise === 'oui') lignes.push(`  A déjà une appli: ${iptv.aUneApp}`);
+    if (iptv.nomApplication) lignes.push(`  Application actuelle: ${iptv.nomApplication}`);
+    if (iptv.typeApp) lignes.push(`  Choix: application ${iptv.typeApp}`);
+    if (iptv.appPayante) lignes.push(`  Application payante choisie: ${iptv.appPayante}`);
+  }
+  return lignes.join('\n');
+};
+
 // POST /api/commandes - créer une commande (avec ou sans compte)
 router.post('/', authOptionnelle, async (req, res) => {
   const { articles, methode_paiement, adresse_livraison, client } = req.body;
@@ -56,7 +72,8 @@ router.post('/', authOptionnelle, async (req, res) => {
         : `Client : ${req.user.email}`;
       const liste = articles.map(a => `- ${a.nom} x${a.quantite || 1}`).join('\n');
       const adresseTxt = adresse_livraison?.adresse ? `\nAdresse: ${adresse_livraison.adresse}` : '';
-      const message = `🔔 Nouvelle commande LKM_BUSINESS #${commande.numero}\n${contact}\n${liste}\nTotal: ${montant_total} FCFA\nPaiement: ${methode_paiement}${adresseTxt}\n→ Vérifier le paiement et préparer${numeriques.length ? '/créer les accès' : ' la commande'}.`;
+      const iptvTxt = adresse_livraison?.iptv ? `\n${formatIptv(adresse_livraison.iptv)}` : '';
+      const message = `🔔 Nouvelle commande LKM_BUSINESS #${commande.numero}\n${contact}\n${liste}\nTotal: ${montant_total} FCFA\nPaiement: ${methode_paiement}${adresseTxt}${iptvTxt}\n→ Vérifier le paiement et préparer${numeriques.length ? '/créer les accès' : ' la commande'}.`;
       notifierWhatsApp(message);
       notifierEmail(`Nouvelle commande #${commande.numero}${estInvite ? ' (sans compte)' : ''}`, message);
     }

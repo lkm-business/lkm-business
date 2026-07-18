@@ -11,6 +11,7 @@ import Compte from './pages/Compte';
 import Checkout from './pages/Checkout';
 import OrderSuccess from './pages/OrderSuccess';
 import Contact from './pages/Contact';
+import About from './pages/About';
 import Produits from './pages/Produits';
 import Abonnements from './pages/Abonnements';
 import Admin from './pages/Admin';
@@ -43,6 +44,7 @@ export default function App() {
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/commande/succes" element={<OrderSuccess />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/about" element={<About />} />
             <Route path="/produits" element={<Produits />} />
             <Route path="/abonnements" element={<Abonnements />} />
             <Route path="/admin" element={<AdminRoute><Admin /></AdminRoute>} />

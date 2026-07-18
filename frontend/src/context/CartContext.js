@@ -6,10 +6,11 @@ export function CartProvider({ children }) {
   const [items, setItems] = useState([]);
   const [open, setOpen] = useState(false);
 
-  const ajouter = (produit, formule = null, quantite = 1) => {
-    const key = formule ? `${produit.id}-${formule.id}` : `${produit.id}`;
+  const ajouter = (produit, formule = null, quantite = 1, couleur = null) => {
+    const key = `${produit.id}${formule ? '-' + formule.id : ''}${couleur ? '-' + couleur : ''}`;
     const enPromo = !formule && produit.prix_promo && Number(produit.prix_promo) < Number(produit.prix);
     const prixUnitaire = formule ? formule.prix : (enPromo ? Number(produit.prix_promo) : produit.prix);
+    const nomBase = formule ? `${produit.nom} — ${formule.duree_label}` : produit.nom;
     setItems(prev => {
       const existant = prev.find(i => i.key === key);
       if (existant) {
@@ -19,7 +20,8 @@ export function CartProvider({ children }) {
         key,
         produit_id: produit.id,
         formule_iptv_id: formule ? formule.id : null,
-        nom: formule ? `${produit.nom} — ${formule.duree_label}` : produit.nom,
+        nom: couleur ? `${nomBase} (${couleur})` : nomBase,
+        couleur,
         prix: prixUnitaire,
         quantite,
         type: produit.type,

@@ -1,10 +1,13 @@
 import { useState } from 'react';
 import { produitImg } from '../utils/images';
+import { colorHex } from '../utils/colors';
 
 const fmt = n => Number(n).toLocaleString('fr-FR') + ' FCFA';
 
 export default function ProductCard({ produit, badge, suffix, onAdd, onInfo, addLabel, width }) {
   const [qty, setQty] = useState(1);
+  const couleurs = Array.isArray(produit.couleurs) ? produit.couleurs : [];
+  const [couleur, setCouleur] = useState(couleurs[0] || null);
   const enPromo = produit.prix_promo && Number(produit.prix_promo) < Number(produit.prix);
   return (
     <div className="product-card" style={{
@@ -44,6 +47,16 @@ export default function ProductCard({ produit, badge, suffix, onAdd, onInfo, add
         {enPromo && <span style={{fontSize: 11, color: '#777', fontWeight: 500, textDecoration: 'line-through'}}>{fmt(produit.prix)}</span>}
         {fmt(enPromo ? produit.prix_promo : produit.prix)}{suffix && <span style={{fontSize: 10, color: '#999', fontWeight: 500}}>{suffix}</span>}
       </div>
+      {couleurs.length > 0 && (
+        <div style={{display: 'flex', alignItems: 'center', gap: 5, marginBottom: 8}}>
+          {couleurs.map(c => (
+            <button key={c} onClick={() => setCouleur(c)} title={c} style={{
+              width: 18, height: 18, borderRadius: '50%', background: colorHex(c), padding: 0, cursor: 'pointer',
+              border: couleur === c ? '2px solid #2DD4A7' : '1px solid #444',
+            }} />
+          ))}
+        </div>
+      )}
       <div style={{display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8}}>
         <button onClick={() => setQty(q => Math.max(1, q - 1))} style={{
           width: 22, height: 22, padding: 0, background: '#1a1a1a', border: '1px solid #333', color: 'white',
@@ -58,13 +71,13 @@ export default function ProductCard({ produit, badge, suffix, onAdd, onInfo, add
       <div style={{display: 'flex', gap: 6}}>
         {onInfo && (
           <button onClick={onInfo} title="Voir les détails" style={{
-            flex: '0 0 auto', padding: '0 10px', background: 'white', border: 'none', color: '#111',
+            flex: '0 0 auto', padding: '0 10px', background: '#1a1a1a', border: '1px solid #333', color: 'white',
             borderRadius: 8, cursor: 'pointer', fontSize: 13, fontWeight: 700
           }}>
             ℹ️
           </button>
         )}
-        <button onClick={() => onAdd(qty)} style={{
+        <button onClick={() => onAdd(qty, couleur)} style={{
           flex: 1, padding: 8, background: '#1D9E75', color: 'white', border: 'none',
           borderRadius: 8, fontSize: 12, fontWeight: 600, cursor: 'pointer'
         }}>
