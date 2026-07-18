@@ -64,16 +64,17 @@ const splitNom = (nom) => {
 router.post('/cinetpay', authOptionnelle, async (req, res) => {
   const { montant, commande_id, description, client } = req.body;
   try {
-    let prenom, nomFamille, email;
+    let prenom, nomFamille, email, telephone;
     if (req.user) {
       const db = req.app.locals.db;
       const u = await db.query('SELECT nom FROM utilisateurs WHERE id=$1', [req.user.id]);
       ({ prenom, nomFamille } = splitNom(u.rows[0]?.nom));
       email = req.user.email;
     } else {
-      if (!client?.email) return res.status(400).json({ message: 'Email requis pour le paiement en ligne' });
-      ({ prenom, nomFamille } = splitNom(client.nom));
-      email = client.email;
+      ({ prenom, nomFamille } = splitNom(client?.nom));
+      telephone = client?.telephone;
+      // CinetPay exige un email valide ; on en génère un si le client n'en a pas fourni (facultatif côté site)
+      email = client?.email?.trim() || `invite${(telephone || '').replace(/\D/g, '') || Date.now()}@lkmbusiness.com`;
     }
 
     const token = await getCinetpayToken();
@@ -91,6 +92,7 @@ router.post('/cinetpay', authOptionnelle, async (req, res) => {
         client_email: email,
         client_first_name: prenom,
         client_last_name: nomFamille,
+        ...(telephone && { client_phone_number: telephone }),
         success_url: `${process.env.FRONTEND_URL}/commande/succes`,
         failed_url: `${process.env.FRONTEND_URL}/checkout`,
         notify_url: `${process.env.BACKEND_URL}/api/paiements/cinetpay/webhook`,

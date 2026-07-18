@@ -6,8 +6,28 @@ import IptvSetupForm from '../components/IptvSetupForm';
 import API from '../utils/api';
 import toast from 'react-hot-toast';
 
+import { estPayanteSeule } from '../utils/iptv';
+
 const cardStyle = {background:'#111',border:'1px solid #262626',borderRadius:12,padding:16,marginBottom:16};
 const inputStyle = {width:'100%',padding:'8px 12px',border:'1px solid #333',borderRadius:8,fontSize:13,boxSizing:'border-box',outline:'none',marginBottom:8,background:'#1a1a1a',color:'white'};
+
+const INDICATIFS = [
+  { code: '+221', pays: 'Sénégal' },
+  { code: '+223', pays: 'Mali' },
+  { code: '+224', pays: 'Guinée' },
+  { code: '+225', pays: "Côte d'Ivoire" },
+  { code: '+226', pays: 'Burkina Faso' },
+  { code: '+227', pays: 'Niger' },
+  { code: '+228', pays: 'Togo' },
+  { code: '+229', pays: 'Bénin' },
+  { code: '+230', pays: 'Maurice' },
+  { code: '+233', pays: 'Ghana' },
+  { code: '+237', pays: 'Cameroun' },
+  { code: '+241', pays: 'Gabon' },
+  { code: '+242', pays: 'Congo' },
+  { code: '+243', pays: 'RD Congo' },
+  { code: '+33', pays: 'France' },
+];
 
 export default function Checkout() {
   const { items, total, vider } = useCart();
@@ -16,7 +36,7 @@ export default function Checkout() {
   const [methode, setMethode] = useState('');
   const [adresse, setAdresse] = useState('');
   const [loading, setLoading] = useState(false);
-  const [invite, setInvite] = useState({ nom: '', telephone: '', email: '' });
+  const [invite, setInvite] = useState({ nom: '', indicatif: '+221', telephone: '', email: '' });
   const [iptvConfig, setIptvConfig] = useState({});
 
   const fmt = n => Number(n).toLocaleString('fr-FR') + ' FCFA';
@@ -24,12 +44,8 @@ export default function Checkout() {
 
   const passer = async () => {
     if (!methode) return toast.error('Choisir une méthode de paiement');
-    if (!user) {
-      if (!invite.nom.trim() || !invite.telephone.trim())
-        return toast.error('Nom et téléphone requis pour commander');
-      if (methode === 'cinetpay' && !invite.email.trim())
-        return toast.error('Email requis pour le paiement en ligne');
-    }
+    if (!user && (!invite.nom.trim() || !invite.telephone.trim()))
+      return toast.error('Nom et téléphone requis pour commander');
     if (hasIptv) {
       if (!iptvConfig.appareil) return toast.error('Choisis sur quel appareil tu vas regarder l\'IPTV');
       if (iptvConfig.appareil === 'tv') {
@@ -39,7 +55,7 @@ export default function Checkout() {
         if (iptvConfig.dejaUtilise === 'oui' && iptvConfig.aUneApp === 'oui' && !iptvConfig.nomApplication?.trim()) return toast.error('Indique le nom de ton application IPTV');
         const besoinChoixApp = iptvConfig.dejaUtilise === 'non' || (iptvConfig.dejaUtilise === 'oui' && iptvConfig.aUneApp === 'non');
         if (besoinChoixApp) {
-          const forcePayanteSeule = ['LG', 'Samsung', 'Hisense'].includes(iptvConfig.marque) && iptvConfig.systeme === 'VIDAA';
+          const forcePayanteSeule = estPayanteSeule(iptvConfig.marque, iptvConfig.systeme);
           if (!forcePayanteSeule && !iptvConfig.typeApp) return toast.error('Choisis une application gratuite ou payante');
           if ((iptvConfig.typeApp === 'payante' || forcePayanteSeule) && !iptvConfig.appPayante) return toast.error('Choisis IBO Player ou SmartOne');
         }
@@ -56,12 +72,13 @@ export default function Checkout() {
         type: i.type,
         duree_jours: i.days
       }));
+      const clientInvite = { ...invite, telephone: `${invite.indicatif}${invite.telephone.trim()}` };
 
       const { data } = await API.post('/commandes', {
         articles,
         methode_paiement: methode,
         adresse_livraison: { adresse, ...(hasIptv && { iptv: iptvConfig }) },
-        ...(!user && { client: invite }),
+        ...(!user && { client: clientInvite }),
       });
 
       if (methode === 'cinetpay') {
@@ -69,7 +86,7 @@ export default function Checkout() {
           montant: total,
           commande_id: data.commande.id,
           description: `Commande LKM_BUSINESS #${data.commande.numero}`,
-          ...(!user && { client: invite }),
+          ...(!user && { client: clientInvite }),
         });
         vider();
         window.location.href = pay.data.url;
@@ -122,8 +139,13 @@ export default function Checkout() {
           <div style={{fontSize:13,fontWeight:500,marginBottom:4,color:'white'}}>Vos informations</div>
           <div style={{fontSize:11,color:'#888',marginBottom:10}}>Pas besoin de compte — remplis juste ces infos pour qu'on te contacte.</div>
           <input value={invite.nom} onChange={e=>setInvite(v=>({...v, nom: e.target.value}))} placeholder="Nom complet *" style={inputStyle} />
-          <input value={invite.telephone} onChange={e=>setInvite(v=>({...v, telephone: e.target.value}))} placeholder="Téléphone (WhatsApp de préférence) *" style={inputStyle} />
-          <input value={invite.email} onChange={e=>setInvite(v=>({...v, email: e.target.value}))} placeholder={methode === 'cinetpay' ? 'Email * (requis pour le paiement en ligne)' : 'Email (optionnel)'} style={{...inputStyle, marginBottom: 0}} />
+          <div style={{display: 'flex', gap: 8}}>
+            <select value={invite.indicatif} onChange={e=>setInvite(v=>({...v, indicatif: e.target.value}))} style={{...inputStyle, flex: '0 0 110px'}}>
+              {INDICATIFS.map(i => <option key={i.code} value={i.code}>{i.code} {i.pays}</option>)}
+            </select>
+            <input value={invite.telephone} onChange={e=>setInvite(v=>({...v, telephone: e.target.value.replace(/\D/g,'')}))} placeholder="Téléphone *" style={{...inputStyle, flex: 1}} />
+          </div>
+          <input value={invite.email} onChange={e=>setInvite(v=>({...v, email: e.target.value}))} placeholder="Email (optionnel)" style={{...inputStyle, marginBottom: 0}} />
         </div>
       )}
 

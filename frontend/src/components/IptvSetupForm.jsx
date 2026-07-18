@@ -1,3 +1,5 @@
+import { estPayanteSeule } from '../utils/iptv';
+
 const cardStyle = {background:'#111',border:'1px solid #262626',borderRadius:12,padding:16,marginBottom:16};
 const selectStyle = {width:'100%',padding:'8px 12px',border:'1px solid #333',borderRadius:8,fontSize:13,boxSizing:'border-box',outline:'none',background:'#1a1a1a',color:'white',marginBottom:10};
 const labelStyle = {fontSize:12,color:'#999',marginBottom:6,display:'block'};
@@ -28,9 +30,7 @@ const OuiNon = ({ value, onChange }) => (
 export default function IptvSetupForm({ config, setConfig }) {
   const set = (champ, valeur) => setConfig(c => ({ ...c, [champ]: valeur }));
 
-  const forcePayanteSeule = config.appareil === 'tv'
-    && ['LG', 'Samsung', 'Hisense'].includes(config.marque)
-    && config.systeme === 'VIDAA';
+  const forcePayanteSeule = config.appareil === 'tv' && estPayanteSeule(config.marque, config.systeme);
 
   return (
     <div style={cardStyle}>
@@ -85,7 +85,7 @@ export default function IptvSetupForm({ config, setConfig }) {
             <>
               {forcePayanteSeule ? (
                 <div style={{fontSize: 12, color: '#f2c14e', marginBottom: 10}}>
-                  ⚠️ Cette TV ({config.marque} / VIDAA) ne supporte pas d'application gratuite fiable — application payante uniquement.
+                  ⚠️ Cette TV ({config.marque} / {config.systeme}) ne supporte pas d'application gratuite fiable — application payante uniquement.
                 </div>
               ) : (
                 <>
